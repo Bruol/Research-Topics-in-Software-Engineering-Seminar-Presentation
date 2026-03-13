@@ -1,50 +1,193 @@
+@import url("https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,400;1,6..72,500&family=IBM+Plex+Mono:wght@300;400;500;600&display=swap");
 @import "tailwindcss";
+
+@font-face {
+  font-family: "FKTGnarly-Regular";
+  src: url("./assets/fonts/FKTGnarly_Rg.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "FKTGnarly-Bold";
+  src: url("./assets/fonts/FKTGnarly_SBd.ttf") format("truetype");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
 
 @layer base {
   :root {
-    @apply text-[rgba(255,255,255,0.87)] bg-[#242424] font-sans;
+    /* ── Palette (PS7 Editorial Violet) ── */
+    --paper: #f5f0e8;
+    --paper-card: #fefcfa;
+    --accent: #6649ff;
+    --accent-soft: #8c76ff;
+    --accent-deep: #3a22c7;
+    --accent-pink: #ff4987;
+    --ink: #121212;
+    --ink-deep: #1a1230;
+    --body: #2a2a2a;
+    --muted: #999;
+    --muted-strong: #666;
+
+    /* ── Font stacks ── */
+    --font-display: "FKTGnarly-Bold", sans-serif;
+    --font-regular: "FKTGnarly-Regular", sans-serif;
+    --font-editorial: "Newsreader", Georgia, serif;
+    --font-mono: "IBM Plex Mono", monospace;
+
+    color: var(--ink);
+    background: var(--paper);
+    font-family: var(--font-editorial);
+    font-size: 18px;
+    line-height: 1.65;
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  html,
+  body,
+  #root {
+    margin: 0;
+    min-height: 100%;
   }
 
   body {
-    @apply grid place-items-center min-w-[320px] min-h-screen relative m-0;
+    min-width: 320px;
+    background: var(--paper);
+    color: var(--ink);
+  }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  img {
+    display: block;
+    max-width: 100%;
   }
 }
 
+/* ── Paper texture overlay (PS7 style) ── */
 body::before {
   content: "";
   position: fixed;
   inset: 0;
-  z-index: -1;
-  opacity: 0.05;
-  background: url("./logo.svg");
-  background-size: 256px;
-  transform: rotate(-12deg) scale(1.35);
-  animation: slide 30s linear infinite;
+  z-index: 0;
   pointer-events: none;
+  opacity: 0.3;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.4'/%3E%3C/svg%3E");
+  background-size: 200px 200px;
 }
 
-@keyframes slide {
+#root {
+  position: relative;
+  z-index: 1;
+}
+
+/* ── Slide page breaks ── */
+.slide-page {
+  page-break-after: always;
+  break-after: page;
+}
+
+.slide-page:last-child {
+  page-break-after: auto;
+  break-after: auto;
+}
+
+/* ── Scroll-driven reveal (interactive only) ── */
+@media (prefers-reduced-motion: no-preference) {
+  .slide-page {
+    view-timeline-name: --slide;
+    view-timeline-axis: block;
+  }
+
+  .slide-page > div,
+  .slide-page header,
+  .slide-page figure,
+  .slide-page ul,
+  .slide-page blockquote {
+    animation: fade-up both ease-out;
+    animation-timeline: --slide;
+    animation-range: entry 10% entry 45%;
+  }
+}
+
+@keyframes fade-up {
   from {
-    background-position: 0 0;
+    opacity: 0;
+    transform: translateY(28px);
   }
   to {
-    background-position: 256px 224px;
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 
-@keyframes spin {
-  from {
-    transform: rotate(0);
+/* ═══════════════════════════════════
+   PRINT / PDF EXPORT
+   ═══════════════════════════════════ */
+@media print {
+  @page {
+    size: 16in 9in;
+    margin: 0;
   }
-  to {
-    transform: rotate(360deg);
-  }
-}
 
-@media (prefers-reduced-motion) {
+  html,
+  body,
+  #root {
+    background: var(--paper);
+    width: 16in;
+  }
+
+  html,
+  body {
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: visible !important;
+  }
+
   *,
-  ::before,
-  ::after {
+  *::before,
+  *::after {
     animation: none !important;
+    transition: none !important;
+    view-timeline-name: none !important;
+    animation-timeline: auto !important;
+    backdrop-filter: none !important;
+  }
+
+  body::before {
+    display: none;
+  }
+
+  main {
+    width: 16in;
+  }
+
+  .slide-page {
+    width: 16in !important;
+    height: 9in !important;
+    min-height: 9in !important;
+    max-height: 9in !important;
+    overflow: hidden !important;
+    break-inside: avoid;
+    page-break-inside: avoid;
+    page-break-after: always;
+    break-after: page;
+  }
+
+  .slide-page:last-child {
+    page-break-after: auto;
+    break-after: auto;
   }
 }
