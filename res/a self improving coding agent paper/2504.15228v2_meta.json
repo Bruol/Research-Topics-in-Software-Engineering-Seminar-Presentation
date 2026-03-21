@@ -1,0 +1,1619 @@
+{
+  "table_of_contents": [
+    {
+      "title": "A Self-Improving Coding Agent",
+      "heading_level": null,
+      "page_id": 0,
+      "polygon": [
+        [
+          187.06640625,
+          99.8338623046875
+        ],
+        [
+          422.84979248046875,
+          99.8338623046875
+        ],
+        [
+          422.84979248046875,
+          117.04925537109375
+        ],
+        [
+          187.06640625,
+          117.04925537109375
+        ]
+      ]
+    },
+    {
+      "title": "Laurence aitchison",
+      "heading_level": null,
+      "page_id": 0,
+      "polygon": [
+        [
+          261.7734375,
+          210.375
+        ],
+        [
+          346.4532775878906,
+          210.375
+        ],
+        [
+          346.4532775878906,
+          221.12109375
+        ],
+        [
+          261.7734375,
+          221.12109375
+        ]
+      ]
+    },
+    {
+      "title": "Abstract",
+      "heading_level": null,
+      "page_id": 0,
+      "polygon": [
+        [
+          282.69140625,
+          272.629150390625
+        ],
+        [
+          328.2432861328125,
+          272.629150390625
+        ],
+        [
+          328.2432861328125,
+          284.5843505859375
+        ],
+        [
+          282.69140625,
+          284.5843505859375
+        ]
+      ]
+    },
+    {
+      "title": "1 Introduction",
+      "heading_level": null,
+      "page_id": 0,
+      "polygon": [
+        [
+          107.279296875,
+          438.15234375
+        ],
+        [
+          190.8136749267578,
+          438.15234375
+        ],
+        [
+          190.8136749267578,
+          451.0703430175781
+        ],
+        [
+          107.279296875,
+          451.0703430175781
+        ]
+      ]
+    },
+    {
+      "title": "Our contributions are:",
+      "heading_level": null,
+      "page_id": 1,
+      "polygon": [
+        [
+          106.681640625,
+          315.09844970703125
+        ],
+        [
+          195.79042053222656,
+          315.09844970703125
+        ],
+        [
+          195.79042053222656,
+          325.0610656738281
+        ],
+        [
+          106.681640625,
+          325.0610656738281
+        ]
+      ]
+    },
+    {
+      "title": "2 Related Work",
+      "heading_level": null,
+      "page_id": 1,
+      "polygon": [
+        [
+          106.98046875,
+          502.5991516113281
+        ],
+        [
+          197.09014892578125,
+          502.5991516113281
+        ],
+        [
+          197.09014892578125,
+          514.5543518066406
+        ],
+        [
+          106.98046875,
+          514.5543518066406
+        ]
+      ]
+    },
+    {
+      "title": "3 Methods",
+      "heading_level": null,
+      "page_id": 2,
+      "polygon": [
+        [
+          107.876953125,
+          407.21484375
+        ],
+        [
+          170.4300537109375,
+          407.21484375
+        ],
+        [
+          170.4300537109375,
+          419.3603820800781
+        ],
+        [
+          107.876953125,
+          419.3603820800781
+        ]
+      ]
+    },
+    {
+      "title": "3.1 Initial agent",
+      "heading_level": null,
+      "page_id": 3,
+      "polygon": [
+        [
+          107.578125,
+          74.31646728515625
+        ],
+        [
+          182.17156982421875,
+          74.31646728515625
+        ],
+        [
+          182.17156982421875,
+          84.279052734375
+        ],
+        [
+          107.578125,
+          84.279052734375
+        ]
+      ]
+    },
+    {
+      "title": "System Prompt",
+      "heading_level": null,
+      "page_id": 3,
+      "polygon": [
+        [
+          421.048828125,
+          158.5546875
+        ],
+        [
+          484.2623596191406,
+          158.5546875
+        ],
+        [
+          484.2623596191406,
+          168.97198486328125
+        ],
+        [
+          421.048828125,
+          168.97198486328125
+        ]
+      ]
+    },
+    {
+      "title": "Core Prompt",
+      "heading_level": null,
+      "page_id": 3,
+      "polygon": [
+        [
+          427.025390625,
+          230.87109375
+        ],
+        [
+          479.2757873535156,
+          230.87109375
+        ],
+        [
+          479.2757873535156,
+          241.615966796875
+        ],
+        [
+          427.025390625,
+          241.615966796875
+        ]
+      ]
+    },
+    {
+      "title": "Assistant Messages",
+      "heading_level": null,
+      "page_id": 3,
+      "polygon": [
+        [
+          414.79901123046875,
+          295.79339599609375
+        ],
+        [
+          493.365234375,
+          295.79339599609375
+        ],
+        [
+          493.365234375,
+          305.7560119628906
+        ],
+        [
+          414.79901123046875,
+          305.7560119628906
+        ]
+      ]
+    },
+    {
+      "title": "Algorithm 1: Self-Referential Agent Improvement.",
+      "heading_level": null,
+      "page_id": 4,
+      "polygon": [
+        [
+          106.3828125,
+          76.5703125
+        ],
+        [
+          314.3671875,
+          76.5703125
+        ],
+        [
+          314.3671875,
+          87.050048828125
+        ],
+        [
+          106.3828125,
+          87.050048828125
+        ]
+      ]
+    },
+    {
+      "title": "4 Experiments and Results",
+      "heading_level": null,
+      "page_id": 4,
+      "polygon": [
+        [
+          106.3828125,
+          637.6921539306641
+        ],
+        [
+          253.45892333984375,
+          637.6921539306641
+        ],
+        [
+          253.45892333984375,
+          649.6473541259766
+        ],
+        [
+          106.3828125,
+          649.6473541259766
+        ]
+      ]
+    },
+    {
+      "title": "4.1 Performance on Reasoning Tasks",
+      "heading_level": null,
+      "page_id": 6,
+      "polygon": [
+        [
+          106.98046875,
+          109.64752197265625
+        ],
+        [
+          271.5659484863281,
+          109.64752197265625
+        ],
+        [
+          271.5659484863281,
+          119.610107421875
+        ],
+        [
+          106.98046875,
+          119.610107421875
+        ]
+      ]
+    },
+    {
+      "title": "0 1 2 3 4 5 6 7 8 9\n0.65\n0.7\n0.75\n0.8\nIndependent math\nverifier\nSympy symbolic\ncalculator\nMath cross\nvalidator\nGeometry\nspecialist\nSystematic mathematical\nreasoning\nAgent Iteration\nMean Accuracy\nAIME and GPQA Show Little Improvement\nMean Accuracy\nBest Mean Accuracy So Far\n95% Confidence Interval",
+      "heading_level": null,
+      "page_id": 6,
+      "polygon": [
+        [
+          108.7734375,
+          175.63946533203125
+        ],
+        [
+          501.6717529296875,
+          175.63946533203125
+        ],
+        [
+          501.6717529296875,
+          336.05859375
+        ],
+        [
+          108.7734375,
+          336.05859375
+        ]
+      ]
+    },
+    {
+      "title": "Figure 4: Agent Framework Saturation: the benefits the agent system was able to find when the\nmodels alone (e.g. o3-mini-high) already perform well was marginal.",
+      "heading_level": null,
+      "page_id": 6,
+      "polygon": [
+        [
+          107.578125,
+          345.7265625
+        ],
+        [
+          503.9971923828125,
+          345.7265625
+        ],
+        [
+          503.9971923828125,
+          369.2190856933594
+        ],
+        [
+          107.578125,
+          369.2190856933594
+        ]
+      ]
+    },
+    {
+      "title": "5 Conclusion",
+      "heading_level": null,
+      "page_id": 6,
+      "polygon": [
+        [
+          107.876953125,
+          545.1671447753906
+        ],
+        [
+          183.06671142578125,
+          545.1671447753906
+        ],
+        [
+          183.06671142578125,
+          557.1223449707031
+        ],
+        [
+          107.876953125,
+          557.1223449707031
+        ]
+      ]
+    },
+    {
+      "title": "5.1 Limitations",
+      "heading_level": null,
+      "page_id": 6,
+      "polygon": [
+        [
+          106.98046875,
+          657.80859375
+        ],
+        [
+          179.680908203125,
+          657.80859375
+        ],
+        [
+          179.680908203125,
+          669.6140975952148
+        ],
+        [
+          106.98046875,
+          669.6140975952148
+        ]
+      ]
+    },
+    {
+      "title": "5.2 Future Work",
+      "heading_level": null,
+      "page_id": 7,
+      "polygon": [
+        [
+          107.279296875,
+          230.09765625
+        ],
+        [
+          186.2163543701172,
+          230.09765625
+        ],
+        [
+          186.2163543701172,
+          240.33709716796875
+        ],
+        [
+          107.279296875,
+          240.33709716796875
+        ]
+      ]
+    },
+    {
+      "title": "6 Safety Considerations",
+      "heading_level": null,
+      "page_id": 7,
+      "polygon": [
+        [
+          107.279296875,
+          443.9891662597656
+        ],
+        [
+          237.84542846679688,
+          443.9891662597656
+        ],
+        [
+          237.84542846679688,
+          455.9443664550781
+        ],
+        [
+          107.279296875,
+          455.9443664550781
+        ]
+      ]
+    },
+    {
+      "title": "References",
+      "heading_level": null,
+      "page_id": 8,
+      "polygon": [
+        [
+          108.0,
+          122.19915771484375
+        ],
+        [
+          163.54385375976562,
+          122.19915771484375
+        ],
+        [
+          163.54385375976562,
+          134.15435791015625
+        ],
+        [
+          108.0,
+          134.15435791015625
+        ]
+      ]
+    },
+    {
+      "title": "A Agent Prompts",
+      "heading_level": null,
+      "page_id": 11,
+      "polygon": [
+        [
+          107.279296875,
+          71.9296875
+        ],
+        [
+          205.892578125,
+          71.9296875
+        ],
+        [
+          205.892578125,
+          84.7423095703125
+        ],
+        [
+          107.279296875,
+          84.7423095703125
+        ]
+      ]
+    },
+    {
+      "title": "Main Agent Prompt",
+      "heading_level": null,
+      "page_id": 11,
+      "polygon": [
+        [
+          125.208984375,
+          162.02349853515625
+        ],
+        [
+          207.087890625,
+          162.02349853515625
+        ],
+        [
+          207.087890625,
+          171.986083984375
+        ],
+        [
+          125.208984375,
+          171.986083984375
+        ]
+      ]
+    },
+    {
+      "title": "A.1 Base Sub-Agent Prompts",
+      "heading_level": null,
+      "page_id": 11,
+      "polygon": [
+        [
+          105.486328125,
+          397.0874938964844
+        ],
+        [
+          239.2672119140625,
+          397.0874938964844
+        ],
+        [
+          239.2672119140625,
+          407.0500793457031
+        ],
+        [
+          105.486328125,
+          407.0500793457031
+        ]
+      ]
+    },
+    {
+      "title": "Main Agent Prompt\nAs a professional and experienced programmer, your approach is to:\n1. slow down and don't write files fully end-to-end in one go\n2. first understand your context thoroughly:\n2.1 explore the project to locate all the files that could be useful documentation (README.md files, common\nlikely MD documentation files, etc)\n2.2 view each of these files, making notes or summaries, and closing irrelevant or long files\n2.3 explore the codebase as it relates to your instructions: find all relevant files, in order to identify\nexisting design patterns and conventions\n3. (optional) prototype and design before starting coding\n3.1 come up with some simple toy examples in a testing directory\n3.2 use execution feedback to benchmark or compare the approaches\n3.3 synthesise the information and learnings into a final design or solution\n4. make code edits\n4.1 identify the most minimal and effective ways to make your required changes\n4.2 observe any existing stylistic conventions\n5. test end-to-end\n5.1 Prefer end-to-end testing in testing scripts without test frameworks\n5.2 If this is not an option or the project already uses a testing framework, then use that\n5.3 Ensure your code is valid, hasn't introduced any regressions and works as intended\n6. Clean up after yourself\n6.1 Check that all the documentation is still up to date after your changes\n6.2 Clean up any temporary files or changes\nNOTE:\n- don't create virtual environments\n- avoid pytest and mocks if you can; prefer end-to-end scripts\n- if the request is clearly exploratory in nature, then you may bypass the rigorous procedure above, and address\nit appropriately\n- call your reasoning agent if you are stuck on a tricky algorithmic or mathematical problem, to help you gain\ninsight and make progress",
+      "heading_level": null,
+      "page_id": 11,
+      "polygon": [
+        [
+          111.1640625,
+          440.0859375
+        ],
+        [
+          498.4453125,
+          440.0859375
+        ],
+        [
+          498.4453125,
+          698.4140625
+        ],
+        [
+          111.1640625,
+          698.4140625
+        ]
+      ]
+    },
+    {
+      "title": "Main Agent Prompt",
+      "heading_level": null,
+      "page_id": 12,
+      "polygon": [
+        [
+          126.10546875,
+          78.1171875
+        ],
+        [
+          206.90980529785156,
+          78.1171875
+        ],
+        [
+          206.90980529785156,
+          89.03204345703125
+        ],
+        [
+          126.10546875,
+          89.03204345703125
+        ]
+      ]
+    },
+    {
+      "title": "Approach:",
+      "heading_level": null,
+      "page_id": 12,
+      "polygon": [
+        [
+          126.10546875,
+          149.2734375
+        ],
+        [
+          155.616943359375,
+          149.2734375
+        ],
+        [
+          155.616943359375,
+          156.3729248046875
+        ],
+        [
+          126.10546875,
+          156.3729248046875
+        ]
+      ]
+    },
+    {
+      "title": "Key principles:",
+      "heading_level": null,
+      "page_id": 12,
+      "polygon": [
+        [
+          124.611328125,
+          191.0390625
+        ],
+        [
+          174.82058715820312,
+          191.0390625
+        ],
+        [
+          174.82058715820312,
+          198.2159423828125
+        ],
+        [
+          124.611328125,
+          198.2159423828125
+        ]
+      ]
+    },
+    {
+      "title": "Main Agent Prompt",
+      "heading_level": null,
+      "page_id": 12,
+      "polygon": [
+        [
+          126.404296875,
+          261.421875
+        ],
+        [
+          208.283203125,
+          261.421875
+        ],
+        [
+          208.283203125,
+          272.48602294921875
+        ],
+        [
+          126.404296875,
+          272.48602294921875
+        ]
+      ]
+    },
+    {
+      "title": "A.2 Overseer Prompt",
+      "heading_level": null,
+      "page_id": 13,
+      "polygon": [
+        [
+          106.3828125,
+          73.08984375
+        ],
+        [
+          206.21131896972656,
+          73.08984375
+        ],
+        [
+          206.21131896972656,
+          84.279052734375
+        ],
+        [
+          106.3828125,
+          84.279052734375
+        ]
+      ]
+    },
+    {
+      "title": "Main Agent Prompt\nYou are an expert system overseer responsible for monitoring agent execution in real-time. You will be shown\nexecution traces as they develop and must make decisions about whether intervention is needed. You are running\nin a loop.\nYour task is to:\n1. Analyze the current execution state\n2. Determine if you have enough information to make confident assessments\n3. Evaluate whether agents are progressing healthily or need intervention\n4. Provide thoughtful and constructive steering notifications to running agents if intervention is needed\n5. In extreme cases, cancel the execution of an agent and notify its parent of why this is\n6. Leave notes for future evaluation iterations if needed\nYou must provide your analysis in the following structured format:\nOVERSEER_EXAMPLES\nHere is the current execution trace:\ngraph_repr\nPrevious overseer notes (if any)\nself._previous_notes if self._previous_notes else 'No notes.'\nKey considerations:\n- Agents that have already returned cannot receive notifications\n- Look at timestamps and event counts to understand execution progress\n- Some agents may legitimately take long periods to complete\n- Consider both local agent health and global execution progress\n- If the agent appears stuck without terminating, remind it that it can exit by generating\n<COMPLETE>{COMPLETE_STOP_TOKEN}\n- If, when the agent has been tasked to work on its own code at meta-improvement time, it is attempting to test\ntools or other features directly (using its own running code), intervene immediately and tell it to either test\na new agent end-to-end (python -m workdir.agent -p \"<some prompt>\"...) or to create test scripts to test the\ntools directly.\n- You may cancel an agent if it is no longer making progress, wasting resources, or very clearly going down the\nwrong path or deviating from its instructions. You must make at least one attempt to notify the agent of its\nwrongdoings before issuing a cancellation command.\n- When canceling an agent, you must also notify its parent calling agent of the reasons for the cancellation.\n- If the task becomes untenable, after multiple failed attempts, and the agent is appearing to repeat itself,\ninstruct the main agent to use its early_exit tool to exit early.\n- Use cancellations sparingly, as they are disruptive and ultimately more costly than guiding the agent to\nsuccessful completion, since any new sub-agent will often have to start the task from scratch.\nThe last time you checked was at: self._last_check_time.strftime(\"%H:%M:%S\") if self._last_check_time else\n\"N/A\"\nThe current timestamp is datetime.now().strftime(\"%H:%M:%S\")\nYour analysis:",
+      "heading_level": null,
+      "page_id": 13,
+      "polygon": [
+        [
+          112.359375,
+          116.7890625
+        ],
+        [
+          499.640625,
+          116.7890625
+        ],
+        [
+          499.640625,
+          495.7734375
+        ],
+        [
+          112.359375,
+          495.7734375
+        ]
+      ]
+    },
+    {
+      "title": "Main Agent Prompt",
+      "heading_level": null,
+      "page_id": 13,
+      "polygon": [
+        [
+          125.208984375,
+          542.5284576416016
+        ],
+        [
+          207.087890625,
+          542.5284576416016
+        ],
+        [
+          207.087890625,
+          552.4910583496094
+        ],
+        [
+          125.208984375,
+          552.4910583496094
+        ]
+      ]
+    },
+    {
+      "title": "B Example Traces",
+      "heading_level": null,
+      "page_id": 14,
+      "polygon": [
+        [
+          108.0,
+          71.9296875
+        ],
+        [
+          209.726806640625,
+          71.9296875
+        ],
+        [
+          209.726806640625,
+          84.7423095703125
+        ],
+        [
+          108.0,
+          84.7423095703125
+        ]
+      ]
+    },
+    {
+      "title": "Main Agent Prompt",
+      "heading_level": null,
+      "page_id": 15,
+      "polygon": [
+        [
+          126.404296875,
+          78.1171875
+        ],
+        [
+          206.90980529785156,
+          78.1171875
+        ],
+        [
+          206.90980529785156,
+          89.03204345703125
+        ],
+        [
+          126.404296875,
+          89.03204345703125
+        ]
+      ]
+    },
+    {
+      "title": "C Function Calling Interface",
+      "heading_level": null,
+      "page_id": 16,
+      "polygon": [
+        [
+          107.578125,
+          286.49114990234375
+        ],
+        [
+          264.07513427734375,
+          286.49114990234375
+        ],
+        [
+          264.07513427734375,
+          298.44635009765625
+        ],
+        [
+          107.578125,
+          298.44635009765625
+        ]
+      ]
+    },
+    {
+      "title": "D Additional Result Details",
+      "heading_level": null,
+      "page_id": 16,
+      "polygon": [
+        [
+          107.279296875,
+          590.3041534423828
+        ],
+        [
+          256.782470703125,
+          590.3041534423828
+        ],
+        [
+          256.782470703125,
+          602.2593536376953
+        ],
+        [
+          107.279296875,
+          602.2593536376953
+        ]
+      ]
+    }
+  ],
+  "page_stats": [
+    {
+      "page_id": 0,
+      "text_extraction_method": "pdftext",
+      "block_counts": [
+        [
+          "Span",
+          157
+        ],
+        [
+          "Line",
+          47
+        ],
+        [
+          "Text",
+          7
+        ],
+        [
+          "SectionHeader",
+          4
+        ],
+        [
+          "PageHeader",
+          1
+        ],
+        [
+          "PageFooter",
+          1
+        ],
+        [
+          "Reference",
+          1
+        ]
+      ],
+      "block_metadata": {
+        "llm_request_count": 0,
+        "llm_error_count": 0,
+        "llm_tokens_used": 0,
+        "previous_text": "",
+        "previous_type": "",
+        "previous_order": 0
+      }
+    },
+    {
+      "page_id": 1,
+      "text_extraction_method": "pdftext",
+      "block_counts": [
+        [
+          "Span",
+          162
+        ],
+        [
+          "Line",
+          60
+        ],
+        [
+          "Text",
+          4
+        ],
+        [
+          "ListItem",
+          3
+        ],
+        [
+          "SectionHeader",
+          2
+        ],
+        [
+          "Figure",
+          1
+        ],
+        [
+          "Caption",
+          1
+        ],
+        [
+          "PageFooter",
+          1
+        ],
+        [
+          "FigureGroup",
+          1
+        ],
+        [
+          "ListGroup",
+          1
+        ],
+        [
+          "Reference",
+          1
+        ]
+      ],
+      "block_metadata": {
+        "llm_request_count": 0,
+        "llm_error_count": 0,
+        "llm_tokens_used": 0,
+        "previous_text": "",
+        "previous_type": "",
+        "previous_order": 0
+      }
+    },
+    {
+      "page_id": 2,
+      "text_extraction_method": "pdftext",
+      "block_counts": [
+        [
+          "Span",
+          300
+        ],
+        [
+          "Line",
+          55
+        ],
+        [
+          "Text",
+          8
+        ],
+        [
+          "Equation",
+          2
+        ],
+        [
+          "SectionHeader",
+          1
+        ],
+        [
+          "PageFooter",
+          1
+        ],
+        [
+          "Reference",
+          1
+        ]
+      ],
+      "block_metadata": {
+        "llm_request_count": 0,
+        "llm_error_count": 0,
+        "llm_tokens_used": 0,
+        "previous_text": "",
+        "previous_type": "",
+        "previous_order": 0
+      }
+    },
+    {
+      "page_id": 3,
+      "text_extraction_method": "pdftext",
+      "block_counts": [
+        [
+          "Span",
+          176
+        ],
+        [
+          "Line",
+          74
+        ],
+        [
+          "ListItem",
+          11
+        ],
+        [
+          "Text",
+          9
+        ],
+        [
+          "SectionHeader",
+          4
+        ],
+        [
+          "ListGroup",
+          3
+        ],
+        [
+          "Caption",
+          1
+        ],
+        [
+          "PageFooter",
+          1
+        ]
+      ],
+      "block_metadata": {
+        "llm_request_count": 0,
+        "llm_error_count": 0,
+        "llm_tokens_used": 0,
+        "previous_text": "",
+        "previous_type": "",
+        "previous_order": 0
+      }
+    },
+    {
+      "page_id": 4,
+      "text_extraction_method": "pdftext",
+      "block_counts": [
+        [
+          "Span",
+          258
+        ],
+        [
+          "Line",
+          52
+        ],
+        [
+          "ListItem",
+          5
+        ],
+        [
+          "Text",
+          4
+        ],
+        [
+          "SectionHeader",
+          2
+        ],
+        [
+          "Reference",
+          2
+        ],
+        [
+          "Code",
+          1
+        ],
+        [
+          "Figure",
+          1
+        ],
+        [
+          "Caption",
+          1
+        ],
+        [
+          "Footnote",
+          1
+        ],
+        [
+          "PageFooter",
+          1
+        ],
+        [
+          "FigureGroup",
+          1
+        ],
+        [
+          "ListGroup",
+          1
+        ]
+      ],
+      "block_metadata": {
+        "llm_request_count": 0,
+        "llm_error_count": 0,
+        "llm_tokens_used": 0,
+        "previous_text": "",
+        "previous_type": "",
+        "previous_order": 0
+      }
+    },
+    {
+      "page_id": 5,
+      "text_extraction_method": "pdftext",
+      "block_counts": [
+        [
+          "Span",
+          394
+        ],
+        [
+          "TableCell",
+          156
+        ],
+        [
+          "Line",
+          53
+        ],
+        [
+          "Text",
+          5
+        ],
+        [
+          "Footnote",
+          2
+        ],
+        [
+          "Caption",
+          1
+        ],
+        [
+          "Table",
+          1
+        ],
+        [
+          "PageFooter",
+          1
+        ],
+        [
+          "TableGroup",
+          1
+        ],
+        [
+          "Reference",
+          1
+        ]
+      ],
+      "block_metadata": {
+        "llm_request_count": 0,
+        "llm_error_count": 0,
+        "llm_tokens_used": 0,
+        "previous_text": "",
+        "previous_type": "",
+        "previous_order": 0
+      }
+    },
+    {
+      "page_id": 6,
+      "text_extraction_method": "pdftext",
+      "block_counts": [
+        [
+          "Span",
+          183
+        ],
+        [
+          "Line",
+          56
+        ],
+        [
+          "Text",
+          6
+        ],
+        [
+          "SectionHeader",
+          5
+        ],
+        [
+          "PageFooter",
+          1
+        ],
+        [
+          "Reference",
+          1
+        ]
+      ],
+      "block_metadata": {
+        "llm_request_count": 0,
+        "llm_error_count": 0,
+        "llm_tokens_used": 0,
+        "previous_text": "",
+        "previous_type": "",
+        "previous_order": 0
+      }
+    },
+    {
+      "page_id": 7,
+      "text_extraction_method": "pdftext",
+      "block_counts": [
+        [
+          "Span",
+          126
+        ],
+        [
+          "Line",
+          52
+        ],
+        [
+          "Text",
+          7
+        ],
+        [
+          "SectionHeader",
+          2
+        ],
+        [
+          "PageFooter",
+          1
+        ]
+      ],
+      "block_metadata": {
+        "llm_request_count": 0,
+        "llm_error_count": 0,
+        "llm_tokens_used": 0,
+        "previous_text": "",
+        "previous_type": "",
+        "previous_order": 0
+      }
+    },
+    {
+      "page_id": 8,
+      "text_extraction_method": "pdftext",
+      "block_counts": [
+        [
+          "Span",
+          179
+        ],
+        [
+          "Line",
+          52
+        ],
+        [
+          "ListItem",
+          15
+        ],
+        [
+          "Reference",
+          15
+        ],
+        [
+          "Text",
+          1
+        ],
+        [
+          "SectionHeader",
+          1
+        ],
+        [
+          "PageFooter",
+          1
+        ],
+        [
+          "ListGroup",
+          1
+        ]
+      ],
+      "block_metadata": {
+        "llm_request_count": 0,
+        "llm_error_count": 0,
+        "llm_tokens_used": 0,
+        "previous_text": "",
+        "previous_type": "",
+        "previous_order": 0
+      }
+    },
+    {
+      "page_id": 9,
+      "text_extraction_method": "pdftext",
+      "block_counts": [
+        [
+          "Span",
+          184
+        ],
+        [
+          "Line",
+          53
+        ],
+        [
+          "ListItem",
+          17
+        ],
+        [
+          "Reference",
+          17
+        ],
+        [
+          "PageFooter",
+          1
+        ],
+        [
+          "ListGroup",
+          1
+        ]
+      ],
+      "block_metadata": {
+        "llm_request_count": 0,
+        "llm_error_count": 0,
+        "llm_tokens_used": 0,
+        "previous_text": "",
+        "previous_type": "",
+        "previous_order": 0
+      }
+    },
+    {
+      "page_id": 10,
+      "text_extraction_method": "pdftext",
+      "block_counts": [
+        [
+          "Span",
+          175
+        ],
+        [
+          "Line",
+          47
+        ],
+        [
+          "ListItem",
+          16
+        ],
+        [
+          "Reference",
+          16
+        ],
+        [
+          "PageFooter",
+          1
+        ],
+        [
+          "ListGroup",
+          1
+        ]
+      ],
+      "block_metadata": {
+        "llm_request_count": 0,
+        "llm_error_count": 0,
+        "llm_tokens_used": 0,
+        "previous_text": "",
+        "previous_type": "",
+        "previous_order": 0
+      }
+    },
+    {
+      "page_id": 11,
+      "text_extraction_method": "pdftext",
+      "block_counts": [
+        [
+          "Span",
+          103
+        ],
+        [
+          "Line",
+          52
+        ],
+        [
+          "SectionHeader",
+          4
+        ],
+        [
+          "Text",
+          3
+        ],
+        [
+          "Reference",
+          2
+        ],
+        [
+          "PageFooter",
+          1
+        ]
+      ],
+      "block_metadata": {
+        "llm_request_count": 0,
+        "llm_error_count": 0,
+        "llm_tokens_used": 0,
+        "previous_text": "",
+        "previous_type": "",
+        "previous_order": 0
+      }
+    },
+    {
+      "page_id": 12,
+      "text_extraction_method": "pdftext",
+      "block_counts": [
+        [
+          "Span",
+          47
+        ],
+        [
+          "Line",
+          24
+        ],
+        [
+          "Text",
+          9
+        ],
+        [
+          "ListItem",
+          7
+        ],
+        [
+          "SectionHeader",
+          4
+        ],
+        [
+          "ListGroup",
+          2
+        ],
+        [
+          "PageFooter",
+          1
+        ]
+      ],
+      "block_metadata": {
+        "llm_request_count": 0,
+        "llm_error_count": 0,
+        "llm_tokens_used": 0,
+        "previous_text": "",
+        "previous_type": "",
+        "previous_order": 0
+      }
+    },
+    {
+      "page_id": 13,
+      "text_extraction_method": "pdftext",
+      "block_counts": [
+        [
+          "Span",
+          123
+        ],
+        [
+          "Line",
+          62
+        ],
+        [
+          "SectionHeader",
+          3
+        ],
+        [
+          "Text",
+          1
+        ],
+        [
+          "Code",
+          1
+        ],
+        [
+          "PageFooter",
+          1
+        ],
+        [
+          "Reference",
+          1
+        ]
+      ],
+      "block_metadata": {
+        "llm_request_count": 0,
+        "llm_error_count": 0,
+        "llm_tokens_used": 0,
+        "previous_text": "",
+        "previous_type": "",
+        "previous_order": 0
+      }
+    },
+    {
+      "page_id": 14,
+      "text_extraction_method": "pdftext",
+      "block_counts": [
+        [
+          "Span",
+          167
+        ],
+        [
+          "Line",
+          62
+        ],
+        [
+          "SectionHeader",
+          1
+        ],
+        [
+          "Code",
+          1
+        ],
+        [
+          "Text",
+          1
+        ],
+        [
+          "PageFooter",
+          1
+        ],
+        [
+          "Reference",
+          1
+        ]
+      ],
+      "block_metadata": {
+        "llm_request_count": 0,
+        "llm_error_count": 0,
+        "llm_tokens_used": 0,
+        "previous_text": "",
+        "previous_type": "",
+        "previous_order": 0
+      }
+    },
+    {
+      "page_id": 15,
+      "text_extraction_method": "pdftext",
+      "block_counts": [
+        [
+          "Span",
+          279
+        ],
+        [
+          "Line",
+          84
+        ],
+        [
+          "SectionHeader",
+          1
+        ],
+        [
+          "Code",
+          1
+        ],
+        [
+          "PageFooter",
+          1
+        ]
+      ],
+      "block_metadata": {
+        "llm_request_count": 0,
+        "llm_error_count": 0,
+        "llm_tokens_used": 0,
+        "previous_text": "",
+        "previous_type": "",
+        "previous_order": 0
+      }
+    },
+    {
+      "page_id": 16,
+      "text_extraction_method": "pdftext",
+      "block_counts": [
+        [
+          "Span",
+          143
+        ],
+        [
+          "Line",
+          49
+        ],
+        [
+          "Text",
+          9
+        ],
+        [
+          "ListItem",
+          4
+        ],
+        [
+          "SectionHeader",
+          2
+        ],
+        [
+          "Code",
+          1
+        ],
+        [
+          "PageFooter",
+          1
+        ],
+        [
+          "ListGroup",
+          1
+        ],
+        [
+          "Reference",
+          1
+        ]
+      ],
+      "block_metadata": {
+        "llm_request_count": 0,
+        "llm_error_count": 0,
+        "llm_tokens_used": 0,
+        "previous_text": "",
+        "previous_type": "",
+        "previous_order": 0
+      }
+    },
+    {
+      "page_id": 17,
+      "text_extraction_method": "pdftext",
+      "block_counts": [
+        [
+          "Span",
+          76
+        ],
+        [
+          "Line",
+          24
+        ],
+        [
+          "ListItem",
+          10
+        ],
+        [
+          "PageFooter",
+          1
+        ],
+        [
+          "ListGroup",
+          1
+        ]
+      ],
+      "block_metadata": {
+        "llm_request_count": 0,
+        "llm_error_count": 0,
+        "llm_tokens_used": 0,
+        "previous_text": "",
+        "previous_type": "",
+        "previous_order": 0
+      }
+    }
+  ],
+  "debug_data_path": "debug_data/2504.15228v2"
+}

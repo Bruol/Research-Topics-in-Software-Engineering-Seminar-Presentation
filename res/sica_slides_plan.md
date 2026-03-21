@@ -1,5 +1,33 @@
 # SICA Slide Deck Plan
 
+## Table of contents
+- [Deck goals](#deck-goals)
+- [Template cues to preserve](#template-cues-to-preserve)
+- [Slide 1 - Title / framing](#slide-1---title--framing)
+- [Slide 2 - Why this paper exists](#slide-2---why-this-paper-exists)
+- [Slide 3 - What is actually new here?](#slide-3---what-is-actually-new-here)
+- [Slide 4 - The SICA loop in one picture](#slide-4---the-sica-loop-in-one-picture)
+- [Slide 5 - The selection objective shapes behavior](#slide-5---the-selection-objective-shapes-behavior)
+- [Slide 6 - The base agent is already a heavy scaffold](#slide-6---the-base-agent-is-already-a-heavy-scaffold)
+- [Slide 7 - Core critique: too many tools, too much context](#slide-7---core-critique-too-many-tools-too-much-context)
+- [Slide 8 - Benchmark 1: SWE-Bench Verified](#slide-8---benchmark-1-swe-bench-verified)
+- [Slide 9 - Benchmark 2: LiveCodeBench](#slide-9---benchmark-2-livecodebench)
+- [Slide 10 - Synthetic benchmarks reward scaffold-specific fixes](#slide-10---synthetic-benchmarks-reward-scaffold-specific-fixes)
+- [Slide 11 - Main result: the gains track concrete scaffold changes](#slide-11---main-result-the-gains-track-concrete-scaffold-changes)
+- [Slide 12 - Strongest critique: baseline comparisons are not very flattering](#slide-12---strongest-critique-baseline-comparisons-are-not-very-flattering)
+- [Slide 13 - Reasoning tasks barely move](#slide-13---reasoning-tasks-barely-move)
+- [Slide 14 - Limitations that matter](#slide-14---limitations-that-matter)
+- [Slide 15 - Supporting evidence for the context-bloat critique](#slide-15---supporting-evidence-for-the-context-bloat-critique)
+- [Slide 16 - Safety section: reasonable, but not the real story](#slide-16---safety-section-reasonable-but-not-the-real-story)
+- [Slide 17 - Future work that would make this genuinely stronger](#slide-17---future-work-that-would-make-this-genuinely-stronger)
+- [Slide 18 - Live demo concept](#slide-18---live-demo-concept)
+- [Slide 19 - Final takeaway](#slide-19---final-takeaway)
+- [Backup slides](#backup-slides)
+- [Backup 1 - Algorithm slide](#backup-1---algorithm-slide)
+- [Backup 2 - Full tool inventory critique](#backup-2---full-tool-inventory-critique)
+- [Backup 3 - High-res result figure](#backup-3---high-res-result-figure)
+- [Backup 4 - If you want a "related systems" side note](#backup-4---if-you-want-a-related-systems-side-note)
+
 ## Deck goals
 - Target length: 25-30 minutes.
 - Tone: interested but critical; do not sell the paper harder than the evidence supports.
@@ -15,25 +43,15 @@
 
 ## Slide 1 - Title / framing
 
+
 ### On-slide title
-Can a coding agent rewrite itself?
+"A Self-Improving(healing) Coding Agent" (Robeyns et al., 2025)
+  --  striketrhough improving and replace by healing
 
-### On-slide subtitle
-A critical reading of "A Self-Improving Coding Agent" (Robeyns et al., 2025)
-
-### On-slide content
+### On-slide content guidelines
 - Claim of the paper: a coding agent can edit its own code and improve benchmark performance.
-- My framing: interesting systems paper, but the gains are narrower than the headline suggests.
-- Preview: what is new, what really improved, and where the method likely breaks.
-
-### Speaker notes
-- Open with the strongest possible concise summary: this is not recursive superintelligence.
-- It is a benchmark-driven search loop over an agent scaffold.
-- Set audience expectation that the interesting part is the engineering loop, not the raw benchmark jump alone.
-
-
-### Graphics / assets
-- Background or right-side graphic: `a%20self%20improving%20coding%20agent/_page_1_Figure_0.jpeg`
+- first agent of this kind
+- actually does not really improve 
 
 ### References
 - Paper: `https://arxiv.org/pdf/2504.15228`
@@ -540,4 +558,3 @@ Verdict
 
 #### Speaker note
 - This keeps you current without over-claiming any direct apples-to-apples comparison.
-
