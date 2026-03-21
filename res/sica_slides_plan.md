@@ -1,560 +1,294 @@
-# SICA Slide Deck Plan
+# SICA / "Self-Improving Coding Agent" Slide Plan
 
-## Table of contents
-- [Deck goals](#deck-goals)
-- [Template cues to preserve](#template-cues-to-preserve)
-- [Slide 1 - Title / framing](#slide-1---title--framing)
-- [Slide 2 - Why this paper exists](#slide-2---why-this-paper-exists)
-- [Slide 3 - What is actually new here?](#slide-3---what-is-actually-new-here)
-- [Slide 4 - The SICA loop in one picture](#slide-4---the-sica-loop-in-one-picture)
-- [Slide 5 - The selection objective shapes behavior](#slide-5---the-selection-objective-shapes-behavior)
-- [Slide 6 - The base agent is already a heavy scaffold](#slide-6---the-base-agent-is-already-a-heavy-scaffold)
-- [Slide 7 - Core critique: too many tools, too much context](#slide-7---core-critique-too-many-tools-too-much-context)
-- [Slide 8 - Benchmark 1: SWE-Bench Verified](#slide-8---benchmark-1-swe-bench-verified)
-- [Slide 9 - Benchmark 2: LiveCodeBench](#slide-9---benchmark-2-livecodebench)
-- [Slide 10 - Synthetic benchmarks reward scaffold-specific fixes](#slide-10---synthetic-benchmarks-reward-scaffold-specific-fixes)
-- [Slide 11 - Main result: the gains track concrete scaffold changes](#slide-11---main-result-the-gains-track-concrete-scaffold-changes)
-- [Slide 12 - Strongest critique: baseline comparisons are not very flattering](#slide-12---strongest-critique-baseline-comparisons-are-not-very-flattering)
-- [Slide 13 - Reasoning tasks barely move](#slide-13---reasoning-tasks-barely-move)
-- [Slide 14 - Limitations that matter](#slide-14---limitations-that-matter)
-- [Slide 15 - Supporting evidence for the context-bloat critique](#slide-15---supporting-evidence-for-the-context-bloat-critique)
-- [Slide 16 - Safety section: reasonable, but not the real story](#slide-16---safety-section-reasonable-but-not-the-real-story)
-- [Slide 17 - Future work that would make this genuinely stronger](#slide-17---future-work-that-would-make-this-genuinely-stronger)
-- [Slide 18 - Live demo concept](#slide-18---live-demo-concept)
-- [Slide 19 - Final takeaway](#slide-19---final-takeaway)
-- [Backup slides](#backup-slides)
-- [Backup 1 - Algorithm slide](#backup-1---algorithm-slide)
-- [Backup 2 - Full tool inventory critique](#backup-2---full-tool-inventory-critique)
-- [Backup 3 - High-res result figure](#backup-3---high-res-result-figure)
-- [Backup 4 - If you want a "related systems" side note](#backup-4---if-you-want-a-related-systems-side-note)
+**use this as a desing/implementation template: /Users/bruol/code/App/presentation-standalone**
 
-## Deck goals
-- Target length: 25-30 minutes.
-- Tone: interested but critical; do not sell the paper harder than the evidence supports.
-- Rule of thumb: one core idea per slide, lots of concrete examples, visible citations, and frequent reminders of what actually improved.
-- Main thesis for the talk: SICA is an interesting proof of self-editing, but much of the reported gain looks like scaffold optimization, not open-ended autonomous invention.
+## Suggested talk shape
+- Act 1: Why this paper matters and what it claims.
+- Act 2: What the system actually is.
+- Act 3: What the results really show.
+- Act 4: Why the headline is weaker than it sounds.
+- Act 5: What would make a stronger follow-up paper.
 
+## Slide list
 
-## Template cues to preserve
+### 1. Title
+- Presentation title: `A Self-Improving Coding Agent`
+  -- strikethrough improving and replace with healing
+- Subtitle: by lorin Urbantat
+- Very short framing: interesting result, but probably more scaffold optimization than open-ended self-improvement.
+- cite url 
+- https://arxiv.org/pdf/2504.15228
 
-- use this as a design/implementation template: /Users/bruol/code/App/presentation-standalone
-
----
-
-## Slide 1 - Title / framing
-
-
-### On-slide title
-"A Self-Improving(healing) Coding Agent" (Robeyns et al., 2025)
-  --  striketrhough improving and replace by healing
-
-### On-slide content guidelines
-- Claim of the paper: a coding agent can edit its own code and improve benchmark performance.
+### 2. The one-sentence claim
+- State the paper's central claim as fairly as possible.
 - first agent of this kind
-- actually does not really improve 
-
-### References
-- Paper: `https://arxiv.org/pdf/2504.15228`
-
----
-
-## Slide 2 - Why this paper exists
-
-### On-slide title
-Self-improvement is the next step after prompting tricks
-
-### On-slide content
-- LLM progress often comes from scaffolding, not just better base models.
-- We moved from direct input-output prompting to CoT, self-consistency, tree search, debate, and self-refinement.
-- SICA asks: if scaffolds matter so much, can the scaffold optimize itself?
-
-### Speaker notes
-- Use this slide to place SICA in the history of prompting and agent design.
-- Mention that the paper is really about automated scaffold search over code, not weight updates.
-- Briefly name CoT, STaR, Tree of Thoughts, and the broader prompting literature.
-
-
-
-### Graphics / assets
-- Main figure: `notes/RTSE%20Presentation/image.png`
-
-### References
-- Tree of Thoughts: https://arxiv.org/pdf/2305.10601
-- STaR: https://arxiv.org/pdf/2203.14465
-- Prompting survey / Prompt Report: https://arxiv.org/pdf/2406.06608
-
----
-
-## Slide 3 - What is actually new here?
-
-### On-slide title
-ADAS improves an agent; SICA tries to improve itself
-
-### On-slide content
-- ADAS has a fixed meta-agent that improves a separate target agent.
-- SICA removes that separation: the best archived agent becomes the next improver.
-- Paper's core hypothesis: if the improver also gets better, improvements might compound.
-
-### Speaker notes
-- Be precise here because this is the conceptual novelty claim.
-- Contrast SICA with ADAS and mention why AlphaEvolve is related but more structured and easier to evaluate.
-- Note that ADAS was tested on math/science-style tasks, not full general coding.
-
-
-
-### Graphics / assets
-- Main figure: `notes/RTSE%20Presentation/image%201.png`
-
-### References
-- ADAS: https://arxiv.org/pdf/2408.08435
-- AlphaEvolve: use paper reference [28] from `a self improving coding agent/a self improving coding agent.md`
-
----
-
-## Slide 4 - The SICA loop in one picture
-
-### On-slide title
-Archive -> improve -> benchmark -> repeat
-
-### On-slide content
-- Start with a base coding agent and benchmark suite.
-- Keep an archive of old agents plus their scores.
-- Pick the current best agent, let it propose one improvement, evaluate it, and add it back to the archive.
-
-### Speaker notes
-- This is the cleanest explanation of the method.
-- Emphasize that there are no weight updates.
-- Everything happens through code edits, prompts, tool changes, and orchestration changes.
-
-
-
-### Graphics / assets
-- Main figure: `notes/RTSE%20Presentation/_page_1_Figure_0.jpeg`
-- Optional backup/high-res: `a%20self%20improving%20coding%20agent/_page_1_Figure_0.jpeg`
-
-### References
-- Paper Figure 1 from `a self improving coding agent/a self improving coding agent.md`
-
----
-
-## Slide 5 - The selection objective shapes behavior
-
-### On-slide title
-It does not optimize accuracy alone
-
-### On-slide content
-- Utility mixes three things: benchmark score, dollar cost, and wall-clock time.
-- Cost is capped at `$10` per problem; time is capped at `300s`.
-- So the system is rewarded for becoming cheaper and faster, not just better.
-
-### Speaker notes
-- This is important because many later improvements are really infrastructure/tooling improvements.
-- Tell the audience this is a good engineering choice, but it complicates the headline claim of "self-improvement".
-- Add the critique explicitly: an agent can improve utility by undoing inefficiencies in its own scaffold.
-
-
-
-### Graphics / assets
-- Main figure: `notes/RTSE%20Presentation/image%203.png`
-
-### References
-- Utility definition from `a self improving coding agent/a self improving coding agent.md`
-
----
-
-## Slide 6 - The base agent is already a heavy scaffold
-
-### On-slide title
-The starting point is not minimal at all
-
-### On-slide content
-- Base tools: file open/close, overwrite, bash, calculator, submit, subagent returns, archive analysis.
-- Extra machinery: multiple subagents plus an asynchronous overseer.
-- The agent context also includes open files and the directory tree.
-
-### Speaker notes
-- This slide sets up the main critique that the authors start from a fairly opinionated scaffold.
-- Mention the one-hour meta-improvement step and the 30-second overseer cadence.
-- Say clearly: this is not "a model starts from scratch and invents tools"; it inherits a lot.
-
-
-### Graphics / assets
-- Main figure: `notes/RTSE%20Presentation/image%204.png`
-
-### References
-- Context structure from `a self improving coding agent/a self improving coding agent.md`
-
----
-
-## Slide 7 - Core critique: too many tools, too much context
-
-### On-slide title
-The scaffold may be hurting the model
-
-### On-slide content
-- SICA starts with many tools and agent roles.
-- Tool-rich, text-heavy harnesses can reduce agent performance.
-- If so, some "self-improvement" may just be the agent removing self-inflicted friction.
-
-### Speaker notes
-- Use the notes' concrete comparison: Claude Code / Codex-style agents often keep the tool set much smaller.
-- Mention CodeAct's argument that code execution is often a better action space than verbose JSON or text action formats.
-- This is one of your strongest interpretive slides.
-
-
-### Graphics / assets
-- Main figure: `notes/RTSE%20Presentation/image%205.png`
-
-### References
-- CodeAct: https://arxiv.org/pdf/2402.01030
-
----
-
-## Slide 8 - Benchmark 1: SWE-Bench Verified
-
-### On-slide title
-Real GitHub issues, patch generation, test-based evaluation
-
-### On-slide content
-- Task: take a real repository plus issue, generate a patch, and pass the tests.
-- This is the most convincing benchmark in the paper because it looks like actual software engineering.
-- Reported result in the run: from `17%` to `53%` on a random subset.
-
-### Speaker notes
-- Explain SWE-Bench clearly; some audience members may not know it.
-- Then immediately add the caveat: it is a subset, not the full benchmark, and comparison to outside results is messy.
-- Use this slide to earn trust by being fair: this is the paper's strongest empirical evidence.
-
-
-### Graphics / assets
-- No existing figure required; design a custom benchmark explainer.
-
-### References
-- SWE-Bench Verified: https://openai.com/index/introducing-swe-bench-verified/
-- Paper benchmark details from `a self improving coding agent/a self improving coding agent.md`
-
----
-
-## Slide 9 - Benchmark 2: LiveCodeBench
-
-### On-slide title
-Good coding benchmark, weak comparison protocol
-
-### On-slide content
-- LiveCodeBench is closer to LeetCode / competitive programming.
-- The paper samples `50` problems randomly across easy, medium, and hard.
-- That breaks comparability to official results because difficulty mix matters a lot.
-
-### Speaker notes
-- Use the concrete example from your notes: Sonnet 3.5 has very different scores by difficulty.
-- That makes a pooled random sample hard to compare fairly against leaderboard numbers.
-- So the result is suggestive, but not a clean benchmark claim.
-
-
-### Graphics / assets
-- No existing figure required; build a simple custom difficulty-composition visual.
-
-### References
-- LiveCodeBench reference from paper ref [26] in `a self improving coding agent/a self improving coding agent.md`
-- Anthropic Claude 3.5 Sonnet benchmark note from your notes: https://www.anthropic.com/news/claude-3-5-sonnet
-
----
-
-## Slide 10 - Synthetic benchmarks reward scaffold-specific fixes
-
-### On-slide title
-The custom tasks line up with the custom improvements
-
-### On-slide content
-- Synthetic task 1: file editing to match a target version.
-- Synthetic task 2: symbol location in a real repo.
-- The biggest gains come from exactly the kinds of tools SICA later adds: smart edit tools and AST-based symbol location.
-
-### Speaker notes
-- This is not a knock on synthetic benchmarks; they are useful.
-- But it does mean we should expect the optimization loop to discover benchmark-local tricks.
-- Phrase it carefully: the agent got better at the tasks it was explicitly shaped to do.
-
-
-### Graphics / assets
-- Optional inset from result curve later, but this slide can work as a custom diagram-only slide.
-
-### References
-- Paper synthetic benchmark descriptions from `a self improving coding agent/a self improving coding agent.md`
-
----
-
-## Slide 11 - Main result: the gains track concrete scaffold changes
-
-### On-slide title
-The curve improves when the agent adds specific utilities
-
-### On-slide content
-- Early gain: `Smart Edit` tool.
-- Mid-run gain: code context summarization and file edit verification.
-- Late gain: AST symbol locator and then a hybrid symbol locator.
-
-### Speaker notes
-- This is the key result slide; spend time here.
-- Interpret the figure as evidence for a practical agent engineering loop, not a mysterious emergent process.
-- Say that the annotations are actually the most convincing part of the paper because they tell us what changed.
-
-
-
-### Graphics / assets
-- Main figure: `notes/RTSE%20Presentation/image%206.png`
-- Optional backup/high-res: `a%20self%20improving%20coding%20agent/_page_4_Figure_7.jpeg`
-
-### References
-- Paper Figure 3 from `a self improving coding agent/a self improving coding agent.md`
-
----
-
-## Slide 12 - Strongest critique: baseline comparisons are not very flattering
-
-### On-slide title
-How much of this beats a simpler modern agent?
-
-### On-slide content
-- Anthropic reported about `49%` on SWE-Bench Verified for a Claude Sonnet agent with a much simpler harness.
-- SICA reaches `53%`, but on a random subset and after a costly 15-iteration run.
-- That makes the absolute gain much less dramatic than the headline suggests.
-
-### Speaker notes
-- This is where you can be sharp without being unfair.
-- Say: impressive as a self-editing demonstration, less impressive as a practical coding-agent result.
-- Mention the run cost from the paper: about `$7,000` for 15 iterations.
-
-
-### Graphics / assets
-- No existing figure required; build a clean table slide.
-
-### References
-- Anthropic SWE-Bench Sonnet: https://www.anthropic.com/engineering/swe-bench-sonnet
-- Paper cost/result details from `a self improving coding agent/a self improving coding agent.md`
-
----
-
-## Slide 13 - Reasoning tasks barely move
-
-### On-slide title
-The scaffold helps agentic coding more than raw reasoning
-
-### On-slide content
-- On AIME 2024 and GPQA Diamond, SICA shows little improvement.
-- The paper's own explanation: strong reasoning models may already be near the scaffold's ceiling.
-- Worse, extra reasoning scaffolds may interrupt a reasoning model rather than help it.
-
-### Speaker notes
-- This slide is important because it narrows the claim.
-- Say that the system seems helpful when orchestration and tool use matter, not when the base model already dominates.
-- This supports your larger thesis that the scaffold is the object being optimized, not general intelligence.
-
-
-### Graphics / assets
-- Custom redraw suggested; the extracted figure is not available in the notes assets.
-
-### References
-- AIME/GPQA discussion from `a self improving coding agent/a self improving coding agent.md`
-- OpenAI o1 system card: https://openai.com/index/openai-o1-system-card/
-
----
-
-## Slide 14 - Limitations that matter
-
-### On-slide title
-Most failure modes are exactly where you would expect
-
-### On-slide content
-- Novel ideas are hard; bad ideas are expensive and can bias later iterations.
-- Five-minute timeouts likely depress the baseline and over-reward speed hacks.
-- The authors heavily steer the initial design, so the search space is narrower than the headline implies.
-
-### Speaker notes
-- This should feel like a synthesis slide, not a complaints dump.
-- Add your strongest hypothesis explicitly: the scaffold may have hurt performance, and the agent partly learned to undo that harm.
-- Mention that results on modern coding agents may depend strongly on the harness because models are RL-shaped on harness behavior.
-
-
-### Graphics / assets
-- Optional small inset of the utility formula again: `notes/RTSE%20Presentation/image%203.png`
-
-### References
-- Paper limitations section from `a self improving coding agent/a self improving coding agent.md`
-
----
-
-## Slide 15 - Supporting evidence for the context-bloat critique
-
-### On-slide title
-More instructions and more whitespace can hurt
-
-### On-slide content
-- Recent evidence suggests added agent instruction files can reduce benchmark performance.
-- Long, cluttered prompts also degrade performance.
-- That makes SICA's open-files + directory-tree + tool-doc heavy context especially suspect.
-
-### Speaker notes
-- This slide makes your critique feel evidence-based, not stylistic.
-- Tie it directly back to Slide 6.
-- If you want a punchier line: `Before asking whether the agent can self-improve, ask whether we handicapped it first.`
-
-
-
-### Graphics / assets
-- Left figure: `notes/RTSE%20Presentation/image%207.png`
-- Right figure: `notes/RTSE%20Presentation/image%208.png`
-
-### References
-- Agents.md benchmark effect: https://arxiv.org/pdf/2602.11988
-- Long context / clutter effect: https://arxiv.org/pdf/2510.05381v1
-
----
-
-## Slide 16 - Safety section: reasonable, but not the real story
-
-### On-slide title
-The paper talks safety; the system is still fairly weak
-
-### On-slide content
-- The paper emphasizes observability and an asynchronous overseer.
-- That is sensible, but this system is not yet powerful enough to be the scary case.
-- The real safety jump would come only if scaffold updates were combined with weight updates.
-
-### Speaker notes
-- Be calm here, not dismissive.
-- Give the authors credit for thinking about observability.
-- Then say the more interesting safety question is future recursive systems with model adaptation, not this one.
-
-
-### Graphics / assets
-- Optional reuse of context-window figure as a faint background: `notes/RTSE%20Presentation/image%204.png`
-
-### References
-- Safety section from `a self improving coding agent/a self improving coding agent.md`
-
----
-
-## Slide 17 - Future work that would make this genuinely stronger
-
-### On-slide title
-What would a better follow-up paper do?
-
-### On-slide content
-- Fine-tune models jointly with the evolving scaffold.
-- Use dynamic or self-generated benchmarks so the system cannot overfit a static set.
-- Test on modern coding harnesses with fewer tools and better action abstractions.
-- Compare directly against current systems, not just older baselines.
-
-### Speaker notes
-- This slide should sound constructive.
-- Mention AlphaEvolve here again as evidence that structured search plus reliable evaluation can work very well in narrow domains.
-- If you want a strong closing line for this slide: `The next version should optimize the harness and the model together.`
-
-
-
-### Graphics / assets
-- Optional small inset: `notes/RTSE%20Presentation/image%201.png`
-
-### References
-- AlphaEvolve: use paper reference [28] from `a self improving coding agent/a self improving coding agent.md`
-- OMNI-EPIC / benchmark generation idea: paper ref [12] in `a self improving coding agent/a self improving coding agent.md`
-
----
-
-## Slide 18 - Live demo concept
-
-### On-slide title
-Live demo: the tiny self-improvement game
-
-### On-slide content
-- Show two tiny toy agents solving the same repo task.
-- Agent A gets a bloated harness; Agent B gets a lean harness.
-- Task options:
-  - find a symbol definition in a tiny repo
-  - edit one buggy function to match a target test
-  - navigate a toy maze/game by issuing file + bash actions
-- The punchline: simpler harness often wins or ties.
-
-### Speaker notes
-- This should run while you talk, not require a big reveal.
-- Best version: a tiny deterministic repo with a visible scoreboard for `time`, `turns`, `tokens`, and `success`.
-- If you want it to feel playful, frame it as `Tool Budget Challenge` or `Agent Boss Fight: 10 tools vs 3 tools`.
-
-
-- Bottom: mono scoreboard with `success`, `turn count`, `latency`, `tool calls` styled like the template stat blocks.
-
-### Graphics / assets
-- No static paper graphic needed; this should be a live embedded demo or animated mockup.
-
-### References
-- Conceptually supported by CodeAct and your context-bloat critique.
-
----
-
-## Slide 19 - Final takeaway
-
-### On-slide title
-Verdict
-
-### On-slide content
-- SICA is a real and interesting proof that an agent can edit its own scaffold.
-- The strongest gains come from practical tooling and context-management improvements.
-- The paper is more convincing as automated agent engineering than as evidence for open-ended recursive self-improvement.
-
-### Speaker notes
-- End with a balanced sentence.
-- My suggested final line: `I buy the loop; I do not yet buy the mythology.`
-
-
-
-### Graphics / assets
-- Optional faint background from the loop figure: `notes/RTSE%20Presentation/_page_1_Figure_0.jpeg`
-
-### References
-- Paper overall.
-
----
+- Mention the headline number: `17% -> 53%` on a random subset of SWE-Bench Verified.
+- Immediately clarify what "self-improving" means here:
+  - no weight updates
+  - code edits to the agent scaffold
+  - benchmark-driven iteration
+
+### 3. Why people care about self-improving agents
+- Place the paper in the broader trend:
+  - prompting strategies
+  - scaffolds/orchestrators
+  - agent systems
+  - automated prompt/system search
+- Mention Chain-of-Thought, STaR, Tree of Thoughts, prompt engineering literature.
+- Key message: performance gains often come from scaffolding, so automating scaffold design is a natural next step. 
+
+### 3.5 Some detail about prompting strategies (CoT, etc)
+- 
+
+### 4. What is actually new here?
+- Contrast SICA with ADAS.
+- Explain the novelty claim:
+  - ADAS has separate meta-agent and target agent
+  - SICA makes the improved agent itself become the next improver
+- Mention AlphaEvolve as related but more structured and easier to evaluate.
+
+### 5. The SICA loop
+- Explain the basic loop:
+  - start with base agent + benchmarks
+  - pick best archived agent
+  - propose one improvement
+  - evaluate
+  - archive and repeat
+- This should be the cleanest "method in one slide" view.
+- Visual-heavy slide using the paper's main loop figure.
+
+### 6. What the system optimizes
+- Explain the utility function at a high level.
+- Benchmark score is only part of the objective.
+- It also optimizes cost and wall-clock time.
+- Mention the caps:
+  - `$10` per problem
+  - `300s` timeout
+- Key critical point: the paper is not optimizing accuracy alone.
+- add the utility functkoin. also add a small visual. you can generate an svg here
+
+
+### 6.5 The agent roles and why they matter
+- Briefly show the sub-agent decomposition:
+  - main orchestrator
+  - software developer
+  - general problem solver
+  - archive explorer
+  - meta-agent design reviewer
+  - reasoning agent
+- Emphasize that each role has tools, prompt text, and control overhead.
+- Key message: this is a rich handcrafted system, not an unconstrained self-design process.
+- cerate a vusual(svg to showcase the different sub-agents and their role)
+
+
+### 7
+- explain overseer agebnt
+- add visual svg
+
+
+### 7.1 slide about the system prompt.
+- add graphic. mention that all open files are included and the entire directory structure
+
+### 7.5 The base agent is already a complex scaffold
+- Explain the initial toolset and agent setup.
+- Mention:
+  - file tools
+  - shell
+  - calculator
+  - benchmark submission
+  - subagents
+  - archive analysis
+  - asynchronous overseer
+- Key message: the agent does not start from a minimal baseline.
+- compare to claude code 10 tools -- this far more tools
+
+### 8. Core critique: too many tools, too much context
+- Present your main criticism clearly.
+- The scaffold may itself be hurting performance.
+- Open files, directory trees, large instructions, and many tools may create context bloat.
+- Hypothesis: some "self-improvement" may simply be removing self-inflicted friction.
+- Mention CodeAct and the broader idea that code/bash action spaces can outperform verbose agent scaffolds.
+- 
+
+### 10. Benchmark 1: SWE-Bench Verified
+- Explain what SWE-Bench Verified is for audience members unfamiliar with it.
+- Why it is the strongest benchmark in the paper:
+  - real GitHub issues
+  - patch generation
+  - test-based evaluation
+- Mention the reported improvement and the fact it is a random subset.
+- 17% -> 53%
+
+### 11. Benchmark 2: LiveCodeBench
+- Explain that this is much closer to coding contest / LeetCode style tasks.
+- Mention the issue with the evaluation protocol:
+  - they randomly sample 50 tasks
+  - difficulty mix matters a lot (threre are 3 difficulties numbers dfor sonnet 3.5 are only published per difficulty thus this does not allow to compare against baseline results)
+  - this limits comparability to official benchmark results
+- Key message: the result is suggestive, but not cleanly comparable.
+- 65% -> 71%
+
+### 12. Benchmark 3: Synthetic tasks
+- Explain the two synthetic tasks:
+  - file editing
+  - symbol location
+- Critical framing:
+  - these tasks align strongly with the exact tools the system later invents or improves
+  - so gains here are useful but not surprising
+- also this allows no comparrison to other result/agent harnesses
+- file: 82% -> 94%, sym: 35% -> 40%
+
+### 13. Main result figure
+- Show the result curve over iterations.
+- Walk through the annotated improvements:
+  - Smart Edit
+  - code context summarization
+  - file edit verification
+  - AST symbol locator
+  - hybrid symbol locator
+- Key message: the gains track very concrete scaffold/tool changes.
+- 
+
+### 14. What actually improved?
+- Interpret the result figure rather than just showing it.
+- Argue that this is best read as automated agent engineering.
+- The system appears to discover practical coding-agent utilities, not broad self-improvement in a deep sense.
+- This is one of the most important interpretation slides.
+- 
+
+### 15. Comparison to anthropics baseline
+- Present your strongest practical critique.
+- Compare the paper's result to Anthropic's simpler Sonnet SWE-Bench agent.
+- Key message:
+  - SICA's final number is only modestly above a much simpler agent setup
+  - and SICA gets there after an expensive multi-iteration search
+- Mention rough run cost: about `$7,000` for 15 iterations.
+- cite the anthropic article (url in notes)
+- cant compare to other benches because they did a strange benchmark setup
+
+### 16. Why the reasoning benchmarks barely move
+- Cover AIME 2024 and GPQA Diamond briefly.
+-  explain the benchmarks 
+- Explain that SICA gives little benefit here.
+- Interpretation:
+  - scaffold search seems more useful for agentic coding tasks than for already-strong reasoning tasks
+- This narrows the paper's true claim.
+- 
+
+### 17. Hidden limitation: the harness may be the bottleneck
+- This is your sharper critique slide.
+- Present the hypothesis directly:
+  - the initial scaffold may have hurt performance
+  - the system then learned to undo parts of that harm
+- Mention evidence from recent work suggesting that longer instruction files / clutter can degrade agent performance.
+- 
+
+### Discussion:
+- are they overfitting to the dataset/benchmark? — discuss in class
+    - test time learning
+
+### 18.5 compare to newer slef improving systems:
+  - include follow up / future work
+    - claude code
+    - openclaw
+    - agents.md
+
+### 19. Future work
+- Constructive follow-up slide.
+- What would make the next paper stronger:
+  - optimize model + scaffold jointly
+  - use dynamic or generated benchmarks to reduce overfitting
+  - compare against current coding agents with leaner harnesses 
+
+
+### 21. Final takeaway
+- Final verdict slide.
+- Suggested message:
+  - SICA is a real proof that an agent can edit its own scaffold
+  - the strongest gains come from practical tooling/context-management changes
+  - this is more convincing as automated scaffold engineering than as open-ended recursive self-improvement
+- 
+
+## Asset / reference slides to include in the main deck or appendix
+
+### 22. Paper figure bank
+- A slide or appendix section containing the important figures you may want to reuse later.
+- Include labels for:
+  - loop figure
+  - algorithm / method figure
+  - utility function figure
+  - context / setup figure
+  - main result curve
+- Purpose: one place to quickly find paper visuals while building the final deck.
+
+### 23. Prompt reference slide
+- A slide or appendix section with
+  - main orchestrator prompt
+  - base sub-agent prompt
+  - overseer prompt
+
+
+### 24. Tool inventory reference slide
+- One slide with the starting tool inventory and agent roles in a compact readable form.
+- This can be used if someone asks whether the system really starts simple.
+- Purpose: support the "too many tools / too much prompt/context" critique.
 
 ## Backup slides
 
-### Backup 1 - Algorithm slide
+### Backup 1. Full algorithm / pseudocode
+- Show the algorithm or a simplified pseudocode version of the loop.
+- Use when someone wants the exact optimization procedure.
 
-#### Purpose
-- If someone asks for the exact optimization loop, show the pseudocode directly.
+### Backup 2. Exact utility function
+- Show the full utility equation and timeout penalty.
+- Use when discussing how score, time, and cost are combined.
 
-#### Graphics / assets
-- `notes/RTSE%20Presentation/image%202.png`
+### Backup 3. Exact benchmark setup
+- Include:
+  - SWE-Bench subset note
+  - LiveCodeBench random sampling note
+  - synthetic benchmark definitions
+- Use when someone challenges the evaluation details.
 
-#### Talking point
-- The best archived agent becomes the next improver; this is the paper's cleanest conceptual difference from ADAS.
+### Backup 4. Exact tool and role breakdown
+- Include the role list and their tool access.
+- Use to defend the context-bloat critique with specifics.
 
-### Backup 2 - Full tool inventory critique
+### Backup 5. Prompt excerpts
+- Include longer excerpts from the main prompt and overseer prompt.
+- Use if someone asks how much behavior comes from prompting vs tool changes.
 
-#### Purpose
-- If you want to really press the "too many tools" point, show the actual starting roles and tools.
 
-#### On-slide content
-- `main_orchestrator`
-- `software_developer`
-- `general_problem_solver`
-- `archive_explorer`
-- `meta_agent_design_reviewer`
-- `reasoning_agent`
+### Backup 8. Context-bloat evidence
+- Include the two supporting references from your notes:
+  - `agents.md` hurting performance -- cite https://arxiv.org/pdf/2602.11988
+  - long/cluttered context hurting performance -- https://arxiv.org/pdf/2602.11988
+  cite chroma research -- https://research.trychroma.com/context-rot
+    --  they put information in a long text and then try to retreive it. -->
+- Use to support the hypothesis that the starting scaffold is partly the problem.
 
-#### Speaker note
-- Then point out that each role also inherits auto-added control tools, which further expands the action space.
+## Concrete assets to gather later
 
-### Backup 3 - High-res result figure
+### Figures from the paper folder
+- `res/a self improving coding agent paper/_page_1_Figure_0.jpeg`
+- `res/a self improving coding agent paper/_page_4_Figure_7.jpeg`
+- `res/a self improving coding agent paper/2504.15228v2.md`
 
-#### Graphics / assets
-- `a%20self%20improving%20coding%20agent/_page_4_Figure_7.jpeg`
+### Extracted figures from your notes folder
+- `res/notes/_page_1_Figure_0.jpeg`
+- `res/notes/image.png`
+- `res/notes/image 1.png`
+- `res/notes/image 2.png`
+- `res/notes/image 3.png`
+- `res/notes/image 4.png`
+- `res/notes/image 5.png`
+- `res/notes/image 6.png`
+- `res/notes/image 7.png`
+- `res/notes/image 8.png`
 
-### Backup 4 - If you want a "related systems" side note
+### Prompt locations in the paper markdown
+- `A Agent Prompts`
+- `A.1 Base Sub-Agent Prompts`
+- `A.2 Overseer Prompt`
+- `C Function Calling Interface`
 
-#### On-slide content
-- Mention recent coding systems such as OpenClaw / Codex / Claude Code only as practical context.
-- Use them qualitatively unless you add verified current benchmark numbers.
-
-#### Speaker note
-- This keeps you current without over-claiming any direct apples-to-apples comparison.

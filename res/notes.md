@@ -20,6 +20,9 @@
 - first self improving agent
 - include follow up / future work
     - find a usuful agent
+    - openclaw
+    - claude code
+    - agents.md
 - its maybe not clear that more context is worse maybe use several papers to support this (good context might help)
 - are they overfitting to the dataset/benchmark? — discuss in class
     - test time learning
@@ -45,7 +48,7 @@ not super intersting compared to systems recently released like openclaw or code
 
 tree of thought: [https://arxiv.org/pdf/2305.10601](https://arxiv.org/pdf/2305.10601)
 
-![image.png](RTSE%20Presentation/image.png)
+![image.png](notes/image.png)
 
 STaR: [https://arxiv.org/pdf/2203.14465](https://arxiv.org/pdf/2203.14465) — Self taught reasoner
 
@@ -58,7 +61,7 @@ ADAS — automated design of agentic Systems:  [https://arxiv.org/pdf/2408.08435
 - the perfomance of agents hits a ceiling with the capabilities of the meta agent
 - only evaluated on Science and Math not on general purpose coding
 
-![image.png](RTSE%20Presentation/image%201.png)
+![image.png](notes/image%201.png)
 
 - alpha evolve:
     - start with baseline program
@@ -78,18 +81,18 @@ ADAS — automated design of agentic Systems:  [https://arxiv.org/pdf/2408.08435
 - Why is a self improving agent a coding agent? beacuse agents are written in code
     - also if everything had an api a coding agent would actually be autonomous
 
-![_page_1_Figure_0.jpeg](RTSE%20Presentation/_page_1_Figure_0.jpeg)
+![_page_1_Figure_0.jpeg](notes/_page_1_Figure_0.jpeg)
 
 - current systems were not self improving coding agents in the sense that they can perform arbitrary tasks (only Math, Science etc.)
 - Archive of old Agents and their benchmark results
 - take the best agent from the archive A. A looks through archive and suggest one improvement
 
-![image.png](RTSE%20Presentation/image%202.png)
+![image.png](notes/image%202.png)
 
 - evaluate new agent on benchmarks with utility function
     - the cost is capped at 10USD and time at 300s
 
-![image.png](RTSE%20Presentation/image%203.png)
+![image.png](notes/image%203.png)
 
 - **Starting Point:**
     - open/close files
@@ -107,7 +110,7 @@ ADAS — automated design of agentic Systems:  [https://arxiv.org/pdf/2408.08435
     - this agent periodicially runs and looks at the main agent and all subagents to judge whether they are on track. it can send notifications to the agents to steer them back to their objective or cancel their run in serious cases
     - it runs every 30s
 
-![image.png](RTSE%20Presentation/image%204.png)
+![image.png](notes/image%204.png)
 
 - the open files and directory tree is context bloat the agent could just run grep or ls or search using glob
 - also the core prompt includes all open files and contents. this is also context bloat
@@ -168,11 +171,11 @@ It has long been clear that agents have worse performance with more tools. And t
 
 Claude Code only as ca. 10 tools
 
-![image.png](RTSE%20Presentation/image%205.png)
+![image.png](notes/image%205.png)
 
 ### Evaluation & Test
 
-![image.png](RTSE%20Presentation/image%206.png)
+![image.png](notes/image%206.png)
 
 - SWEBench Verified, LiveCodeBench and synthetic
     - Synthetic:
@@ -215,7 +218,7 @@ Claude Code only as ca. 10 tools
 - [agents.md](http://agents.md) hurts performance on benchmark: https://arxiv.org/pdf/2602.11988
     - maybe this is an indicator that a self improving agent isn’t a good Idea
 
-![image.png](RTSE%20Presentation/image%207.png)
+![image.png](notes/image%207.png)
 
 - this is already a lot of tools. normal coding agents (claude code/ codex only have arount 10 tools) → long context length hurts performance: https://arxiv.org/pdf/2510.05381v1
     - functions.question
@@ -231,6 +234,11 @@ Claude Code only as ca. 10 tools
     - functions.google_search
     - multi_tool_use.parallel
     
-    ![image.png](RTSE%20Presentation/image%208.png)
+    ![image.png](notes/image%208.png)
+    -- context length alone hurts perfomrance https://arxiv.org/pdf/2510.05381v1
+
+
+    context rot repeated words gpt family models -- https://research.trychroma.com/context-rot
+    ![alt text](notes/image%209.png)
     
-    ![image.png](RTSE%20Presentation/image%204.png)
+    ![image.png](notes/image%204.png)
