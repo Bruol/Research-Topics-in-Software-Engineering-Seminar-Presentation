@@ -107,7 +107,7 @@
 - The scaffold may itself be hurting performance.
 - Open files, directory trees, large instructions, and many tools may create context bloat.
 - Hypothesis: some "self-improvement" may simply be removing self-inflicted friction.
-- Mention CodeAct and the broader idea that code/bash action spaces can outperform verbose agent scaffolds.
+- Mention CodeAct and the broader idea that code/bash action spaces can outperform verbose agent scaffolds. -- cite the code act paper
 - 
 
 ### 10. Benchmark 1: SWE-Bench Verified
@@ -266,29 +266,4 @@
   cite chroma research -- https://research.trychroma.com/context-rot
     --  they put information in a long text and then try to retreive it. -->
 - Use to support the hypothesis that the starting scaffold is partly the problem.
-
-## Concrete assets to gather later
-
-### Figures from the paper folder
-- `res/a self improving coding agent paper/_page_1_Figure_0.jpeg`
-- `res/a self improving coding agent paper/_page_4_Figure_7.jpeg`
-- `res/a self improving coding agent paper/2504.15228v2.md`
-
-### Extracted figures from your notes folder
-- `res/notes/_page_1_Figure_0.jpeg`
-- `res/notes/image.png`
-- `res/notes/image 1.png`
-- `res/notes/image 2.png`
-- `res/notes/image 3.png`
-- `res/notes/image 4.png`
-- `res/notes/image 5.png`
-- `res/notes/image 6.png`
-- `res/notes/image 7.png`
-- `res/notes/image 8.png`
-
-### Prompt locations in the paper markdown
-- `A Agent Prompts`
-- `A.1 Base Sub-Agent Prompts`
-- `A.2 Overseer Prompt`
-- `C Function Calling Interface`
 

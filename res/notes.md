@@ -48,8 +48,6 @@ not super intersting compared to systems recently released like openclaw or code
 
 tree of thought: [https://arxiv.org/pdf/2305.10601](https://arxiv.org/pdf/2305.10601)
 
-![image.png](notes/image.png)
-
 STaR: [https://arxiv.org/pdf/2203.14465](https://arxiv.org/pdf/2203.14465) — Self taught reasoner
 
 different prompting strategies have a big impact: [https://arxiv.org/pdf/2406.06608](https://arxiv.org/pdf/2406.06608)
@@ -61,7 +59,7 @@ ADAS — automated design of agentic Systems:  [https://arxiv.org/pdf/2408.08435
 - the perfomance of agents hits a ceiling with the capabilities of the meta agent
 - only evaluated on Science and Math not on general purpose coding
 
-![image.png](notes/image%201.png)
+![agent archive.png](notes/agent%20archive.png)
 
 - alpha evolve:
     - start with baseline program
@@ -81,18 +79,18 @@ ADAS — automated design of agentic Systems:  [https://arxiv.org/pdf/2408.08435
 - Why is a self improving agent a coding agent? beacuse agents are written in code
     - also if everything had an api a coding agent would actually be autonomous
 
-![_page_1_Figure_0.jpeg](notes/_page_1_Figure_0.jpeg)
+![agent improvement.jpeg](notes/agent%20improvement.jpeg)
 
 - current systems were not self improving coding agents in the sense that they can perform arbitrary tasks (only Math, Science etc.)
 - Archive of old Agents and their benchmark results
 - take the best agent from the archive A. A looks through archive and suggest one improvement
 
-![image.png](notes/image%202.png)
+![algorithm.png](notes/algorithm.png)
 
 - evaluate new agent on benchmarks with utility function
     - the cost is capped at 10USD and time at 300s
 
-![image.png](notes/image%203.png)
+![utility function.png](notes/utility%20function.png)
 
 - **Starting Point:**
     - open/close files
@@ -110,7 +108,7 @@ ADAS — automated design of agentic Systems:  [https://arxiv.org/pdf/2408.08435
     - this agent periodicially runs and looks at the main agent and all subagents to judge whether they are on track. it can send notifications to the agents to steer them back to their objective or cancel their run in serious cases
     - it runs every 30s
 
-![image.png](notes/image%204.png)
+![system prompt.png](notes/system%20prompt.png)
 
 - the open files and directory tree is context bloat the agent could just run grep or ls or search using glob
 - also the core prompt includes all open files and contents. this is also context bloat
@@ -171,11 +169,11 @@ It has long been clear that agents have worse performance with more tools. And t
 
 Claude Code only as ca. 10 tools
 
-![image.png](notes/image%205.png)
+![code act vs. tool calls.png](notes/code%20act%20vs.%20tool%20calls.png)
 
 ### Evaluation & Test
 
-![image.png](notes/image%206.png)
+![immprovement.png](notes/immprovement.png)
 
 - SWEBench Verified, LiveCodeBench and synthetic
     - Synthetic:
@@ -218,7 +216,7 @@ Claude Code only as ca. 10 tools
 - [agents.md](http://agents.md) hurts performance on benchmark: https://arxiv.org/pdf/2602.11988
     - maybe this is an indicator that a self improving agent isn’t a good Idea
 
-![image.png](notes/image%207.png)
+![agents_md.png](notes/agents_md.png)
 
 - this is already a lot of tools. normal coding agents (claude code/ codex only have arount 10 tools) → long context length hurts performance: https://arxiv.org/pdf/2510.05381v1
     - functions.question
@@ -234,11 +232,11 @@ Claude Code only as ca. 10 tools
     - functions.google_search
     - multi_tool_use.parallel
     
-    ![image.png](notes/image%208.png)
+    ![context alone hurts performance.png](notes/context%20alone%20hurts%20performance.png)
     -- context length alone hurts perfomrance https://arxiv.org/pdf/2510.05381v1
 
 
     context rot repeated words gpt family models -- https://research.trychroma.com/context-rot
-    ![alt text](notes/image%209.png)
+    ![context rot.png](notes/context%20rot.png)
     
-    ![image.png](notes/image%204.png)
+    ![system prompt.png](notes/system%20prompt.png)
