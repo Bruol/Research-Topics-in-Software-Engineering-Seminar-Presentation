@@ -31,10 +31,10 @@
   --muted: #666;
   --rule: #1a1a1a;
   
-  /* Accent colors */
+  /* Accent colors - Purple */
   --accent: #6649ff;
-  --accent-soft: #8c76ff;
-  --accent-deep: #3a22c7;
+  
+  /* Highlight - Pink */
   --highlight: #ff4987;
   --highlight-soft: rgba(255, 73, 135, 0.12);
   
@@ -60,6 +60,16 @@ body {
   font-family: var(--font-serif);
   -webkit-font-smoothing: antialiased;
   overflow: hidden;
+}
+
+@page {
+  size: 13.333in 7.5in;
+  margin: 0;
+}
+
+.print-deck,
+.print-slide {
+  background: var(--paper);
 }
 
 * {
