@@ -314,6 +314,28 @@ function SlideFrame({
   sourceLinks?: { label: string; href: string }[];
 }) {
   const hasVisual = !!(visual || image || image2);
+  const slideMarker = (
+    <>
+      <span className="font-mono text-[clamp(0.6rem,0.8vw,0.75rem)] font-medium uppercase tracking-[0.15em] text-[var(--accent)]">
+        No. {String(slideNumber).padStart(2, "0")}
+      </span>
+      <hr className="h-[3px] w-[60px] border-0 bg-[var(--accent)]" />
+      {eyebrow ? <p className="font-mono text-[clamp(0.65rem,0.9vw,0.85rem)] font-semibold uppercase tracking-[0.12em] text-[var(--accent)]">{eyebrow}</p> : null}
+    </>
+  );
+  const slideBody = (
+    <>
+      <h2 className={["m-0 max-w-[22ch] capitalize font-display text-[clamp(1.8rem,4vw,3.5rem)] leading-[1.1] tracking-[-0.02em]", appendix ? "text-[var(--ink-soft)]" : "text-[var(--ink)]"].join(" ")}>
+        {title}
+      </h2>
+      {byline ? <p className="m-0 font-mono text-[clamp(1rem,1.8vw,1.5rem)] font-semibold uppercase tracking-[0.08em] text-[var(--accent)]">{byline}</p> : null}
+      <hr className="max-w-[400px] border-0 border-t border-[rgba(18,18,18,0.15)]" />
+      {thesis ? <p className="m-0 max-w-[56ch] font-serif text-[clamp(1rem,1.4vw,1.25rem)] italic leading-[1.5] text-[var(--ink-soft)]">{thesis}</p> : null}
+      {children}
+      {sourceLinks?.length ? <SourcePills links={sourceLinks} /> : null}
+    </>
+  );
+
   return (
     <section
       className={[
@@ -322,24 +344,20 @@ function SlideFrame({
       ].join(" ")}
     >
       <div className={["absolute inset-y-0 left-0 w-[5px]", appendix ? "bg-[var(--muted)] opacity-40" : "bg-[var(--accent)]"].join(" ")} />
-      <div className={["grid w-full max-w-[1600px] gap-[3vw] pl-6", hasVisual ? "grid-cols-1 items-start lg:grid-cols-[1.1fr_0.9fr]" : wide ? "grid-cols-1" : "max-w-[900px] grid-cols-1"].join(" ")}>
-        <div className="flex flex-col gap-[1.5vh]">
-          <span className="font-mono text-[clamp(0.6rem,0.8vw,0.75rem)] font-medium uppercase tracking-[0.15em] text-[var(--accent)]">
-            No. {String(slideNumber).padStart(2, "0")}
-          </span>
-          <hr className="h-[3px] w-[60px] border-0 bg-[var(--accent)]" />
-          {eyebrow ? <p className="font-mono text-[clamp(0.65rem,0.9vw,0.85rem)] font-semibold uppercase tracking-[0.12em] text-[var(--accent)]">{eyebrow}</p> : null}
-          <h2 className={["m-0 max-w-[22ch] font-display text-[clamp(1.8rem,4vw,3.5rem)] leading-[1.1] tracking-[-0.02em]", appendix ? "text-[var(--ink-soft)]" : "text-[var(--ink)]"].join(" ")}>
-            {title}
-          </h2>
-          {byline ? <p className="m-0 font-mono text-[clamp(1rem,1.8vw,1.5rem)] font-semibold uppercase tracking-[0.08em] text-[var(--accent)]">{byline}</p> : null}
-          <hr className="max-w-[400px] border-0 border-t border-[rgba(18,18,18,0.15)]" />
-          {thesis ? <p className="m-0 max-w-[56ch] font-serif text-[clamp(1rem,1.4vw,1.25rem)] italic leading-[1.5] text-[var(--ink-soft)]">{thesis}</p> : null}
-          {children}
-          {sourceLinks?.length ? <SourcePills links={sourceLinks} /> : null}
-        </div>
+      <div
+        className={[
+          "grid w-full max-w-[1600px] gap-[3vw] pl-6",
+          hasVisual
+            ? "grid-cols-1 items-start lg:grid-cols-[1.1fr_0.9fr] lg:grid-rows-[auto_1fr]"
+            : wide
+              ? "grid-cols-1"
+              : "max-w-[900px] grid-cols-1",
+        ].join(" ")}
+      >
+        <div className={["flex flex-col gap-[1.5vh]", hasVisual ? "lg:col-start-1 lg:row-start-1" : ""].join(" ")}>{slideMarker}</div>
+        <div className={["flex flex-col gap-[1.5vh]", hasVisual ? "lg:col-start-1 lg:row-start-2" : ""].join(" ")}>{slideBody}</div>
         {hasVisual ? (
-          <div className="flex flex-col gap-[1.5vh]">
+          <div className="flex flex-col gap-[1.5vh] lg:col-start-2 lg:row-start-2">
             {visual ? <div className="overflow-hidden rounded-xl border border-[rgba(102,73,255,0.12)] bg-[rgba(255,255,255,0.8)] p-[1vw] shadow-[0_8px_24px_rgba(102,73,255,0.06)] [&_svg]:max-h-[60vh] [&_svg]:w-full">{visual}</div> : null}
             {image ? <div className={["overflow-hidden rounded-xl border border-[rgba(102,73,255,0.12)] bg-[rgba(255,255,255,0.75)] p-[0.8vw] shadow-[0_8px_24px_rgba(102,73,255,0.06)]", imageWrapperClassName ?? ""].join(" ")}><img src={image} alt={imageAlt ?? "Slide visual"} className={["block max-h-[55vh] w-full rounded-lg object-contain", imageClassName ?? ""].join(" ")} /></div> : null}
             {image2 ? <div className="overflow-hidden rounded-xl border border-[rgba(102,73,255,0.12)] bg-[rgba(255,255,255,0.75)] p-[0.8vw] shadow-[0_8px_24px_rgba(102,73,255,0.06)]"><img src={image2} alt={image2Alt ?? "Secondary visual"} className="block max-h-[45vh] w-full rounded-lg object-contain" /></div> : null}
@@ -421,13 +439,13 @@ function renderSlide(slideIndex: number, printMode = false, onNavigate?: (index:
     // Slide 3
     case 2:
       return (
-        <SlideFrame slideNumber={3} eyebrow="Context" title="From Prompting strategies to Agent Scaffold" thesis="A lot of LLM progress comes from scaffolding rather than base-model changes, so automating scaffold design is an obvious next step." visual={<PromptingTimelineVisual activeStep={1} />} printMode={printMode} />
+        <SlideFrame slideNumber={3} eyebrow="Context" title="From Prompting Strategies To Agent Scaffold" thesis="We started with Zero-Shot Prompting" visual={<PromptingTimelineVisual activeStep={1} />} printMode={printMode} />
       );
 
     // Slide 4
     case 3:
       return (
-        <SlideFrame slideNumber={4} eyebrow="Context" title="SICA arrives after years of prompt engineering" thesis="Chain-of-thought, STaR, Tree of Thoughts, and self-refinement all support the same lesson: orchestration choices can matter nearly as much as model weights." visual={<PromptingTimelineVisual activeStep={2} />} printMode={printMode} />
+        <SlideFrame slideNumber={4} eyebrow="Context" title="SICA arrives after years of prompt engineering" thesis="Chain-of-thought, STaR, Tree of Thoughts, Graph of Thought" visual={<PromptingTimelineVisual activeStep={2} />} printMode={printMode} />
       );
 
     // Slide 5
@@ -436,7 +454,7 @@ function renderSlide(slideIndex: number, printMode = false, onNavigate?: (index:
         <SlideFrame slideNumber={5} eyebrow="Context" title="What is actually new relative to ADAS and AlphaEvolve?" thesis="ADAS improves a separate target agent, while SICA makes the current best agent become the next improver, which is the paper’s core novelty claim." visual={<PromptingTimelineVisual activeStep={3} />} printMode={printMode}>
           <div className="mt-[1vh] grid max-w-[38rem] grid-cols-2 gap-[1vw]">
             <InfoCard title="ADAS" body="Fixed meta-agent, separate target agent, more constrained setting." />
-            <InfoCard title="Alpha Evolve" body="Starts from a baseline program plus a reference test, then keeps iterating toward a faster objective. -- only works for highly structured problems." />
+            <InfoCard title="Alpha Evolve" body="Starts from a baseline program plus a reference test, then keeps iterating toward a faster objective - only works for highly structured problems." />
           </div>
         </SlideFrame>
       );
@@ -520,7 +538,7 @@ function renderSlide(slideIndex: number, printMode = false, onNavigate?: (index:
     // Slide 17
     case 16:
       return (
-        <SlideFrame slideNumber={17} eyebrow="Benchmark 3" title="The synthetic tasks reward the exact utilities the system later learns" thesis="File editing and symbol location are useful agent tasks, but they also strongly reward smart-edit and AST-based retrieval improvements, so gains here are less surprising." printMode={printMode}>
+        <SlideFrame slideNumber={17} eyebrow="Benchmark 3" title="The synthetic Benchmark" thesis="File editing and symbol location are useful agent tasks, but they also strongly reward smart-edit and AST-based retrieval improvements, so gains here are less surprising." printMode={printMode}>
           <div className="mt-[1vh] grid max-w-[32rem] grid-cols-2 gap-[1vw]">
             <StatCard label="File Editing" value="82% → 94%" />
             <StatCard label="Symbol Location" value="35% → 40%" />
@@ -564,7 +582,7 @@ function renderSlide(slideIndex: number, printMode = false, onNavigate?: (index:
     // Slide 22
     case 21:
       return (
-        <SlideFrame slideNumber={22} eyebrow="Sharper Critique" title="The harness may be the bottleneck, and the agent may be learning to undo it" thesis="My strongest hypothesis is that the initial scaffold hurts performance enough that part of SICA’s success comes from removing unnecessary prompt and tool overhead." image="/notes/agents_md.png" imageAlt="Agents md chart" image2="/notes/context alone hurts performance.png" image2Alt="Context clutter chart" printMode={printMode} sourceLinks={[{ label: "Agents MD", href: "https://arxiv.org/pdf/2602.11988" }, { label: "Context Length Alone Hurts LLM Performance", href: "https://arxiv.org/pdf/2510.05381v1" }]} />
+        <SlideFrame slideNumber={22} eyebrow="Sharper Critique" title="The scaffold is the bottleneck, and the agent learns to undo it" thesis="My strongest hypothesis is that the initial scaffold hurts performance enough that part of SICA’s success comes from removing unnecessary prompt and tool overhead." image="/notes/agents_md.png" imageAlt="Agents md chart" image2="/notes/context alone hurts performance.png" image2Alt="Context clutter chart" printMode={printMode} sourceLinks={[{ label: "Agents MD", href: "https://arxiv.org/pdf/2602.11988" }, { label: "Context Length Alone Hurts LLM Performance", href: "https://arxiv.org/pdf/2510.05381v1" }]} />
       );
 
     // Slide 23
