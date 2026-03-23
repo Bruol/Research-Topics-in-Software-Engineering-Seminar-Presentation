@@ -7,7 +7,9 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "preview": "vite preview",
-    "export:pdf": "bun run scripts/export-pdf.ts"
+    "export:pdf": "bun run scripts/export-pdf.ts",
+    "deploy": "bun run build && bunx wrangler deploy",
+    "deploy:workers": "bun run build && bunx wrangler deploy"
   },
   "dependencies": {
     "mermaid": "^11.13.0",
