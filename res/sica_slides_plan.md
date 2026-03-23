@@ -108,7 +108,7 @@
 - Open files, directory trees, large instructions, and many tools may create context bloat.
 - Hypothesis: some "self-improvement" may simply be removing self-inflicted friction.
 - Mention CodeAct and the broader idea that code/bash action spaces can outperform verbose agent scaffolds. -- cite the code act paper
-- 
+
 
 ### 10. Benchmark 1: SWE-Bench Verified
 - Explain what SWE-Bench Verified is for audience members unfamiliar with it.
@@ -138,6 +138,9 @@
 - also this allows no comparrison to other result/agent harnesses
 - file: 82% -> 94%, sym: 35% -> 40%
 
+- file_editing: Given a real repo at a pre-change commit and the desired target file contents, edit the file so it exactly matches the target version.(src:  base_agent/src/benchmarks/file_editing.py:397)
+- symbol_location: Given a symbol usage in a real repo, find and return the exact file, line, and column where that symbol is defined. (src: base_agent/src/benchmarks/symbol_location.py:233)
+
 ### 13. Main result figure
 - Show the result curve over iterations.
 - Walk through the annotated improvements:
@@ -150,7 +153,7 @@
 - 
 
 ### 14. What actually improved?
-- Interpret the result figure rather than just showing it.
+- Interpret the result figure rather than just showing i.
 - Argue that this is best read as automated agent engineering.
 - The system appears to discover practical coding-agent utilities, not broad self-improvement in a deep sense.
 - This is one of the most important interpretation slides.

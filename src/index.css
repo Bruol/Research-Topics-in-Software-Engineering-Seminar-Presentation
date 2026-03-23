@@ -209,6 +209,47 @@ body::before {
 .reveal-delay-4 { transition-delay: 0.4s; }
 .reveal-delay-5 { transition-delay: 0.5s; }
 
+/* Mermaid slide styling */
+.mermaid-sica {
+  min-height: 28rem;
+}
+
+.mermaid-sica svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: 60vh;
+}
+
+.mermaid-sica .cluster-label,
+.mermaid-sica .cluster-label span,
+.mermaid-sica .nodeLabel,
+.mermaid-sica .nodeLabel p {
+  font-family: var(--font-serif);
+}
+
+.mermaid-sica .cluster-label,
+.mermaid-sica .cluster-label span {
+  font-family: var(--font-display);
+}
+
+.mermaid-sica .edgeLabel,
+.mermaid-sica .edgeLabel p {
+  font-family: var(--font-mono);
+  font-size: 0.68rem !important;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.mermaid-sica .label foreignObject {
+  overflow: visible;
+}
+
+.mermaid-sica .edgeLabel rect {
+  fill: var(--paper-warm) !important;
+  opacity: 0.96;
+}
+
 /* ═══════════════════════════════════
    Print Styles
    ═══════════════════════════════════ */

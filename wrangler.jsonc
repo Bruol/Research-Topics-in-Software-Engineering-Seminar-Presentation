@@ -1,0 +1,9 @@
+{
+  "name": "rtse-presentation-worker",
+  "main": "src/worker.ts",
+  "compatibility_date": "2026-03-23",
+  "assets": {
+    "directory": "./app_dist",
+    "binding": "ASSETS"
+  }
+}

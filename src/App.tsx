@@ -1,138 +1,75 @@
 import { useEffect, useState, type ReactNode } from "react";
+import { UtilityVisual } from "./components/UtilityVisual";
 
-const TOTAL_SLIDES = 30;
+const TOTAL_SLIDES = 36;
 const APPENDIX_START = 26;
+const SLIDE_STORAGE_KEY = "rtse-presentation-current-slide";
 
 function clampIndex(nextIndex: number, max: number) {
   return Math.max(0, Math.min(max - 1, nextIndex));
 }
 
-function UtilityVisual() {
-  return (
-    <svg viewBox="0 0 880 520" className="h-full w-full">
-      <defs>
-        <linearGradient id="utilityFill" x1="0%" x2="100%">
-          <stop offset="0%" stopColor="#6c52d1" stopOpacity="0.95" />
-          <stop offset="100%" stopColor="#f2a562" stopOpacity="0.95" />
-        </linearGradient>
-      </defs>
-      <rect x="20" y="20" width="840" height="480" rx="28" fill="#fcfbf8" />
-      <text x="70" y="90" fill="#2a2240" fontSize="34" fontFamily="Georgia, serif">
-        Utility is a weighted blend, not a pure accuracy metric
-      </text>
-      <text x="70" y="130" fill="#6c6780" fontSize="19" fontFamily="system-ui, sans-serif">
-        Score gets 50%, but cost and time still control selection pressure
-      </text>
-      {[
-        { label: "Benchmark score", value: 50, y: 185 },
-        { label: "Cost efficiency", value: 25, y: 270 },
-        { label: "Time efficiency", value: 25, y: 355 },
-      ].map((bar) => (
-        <g key={bar.label}>
-          <text x="70" y={bar.y} fill="#44385f" fontSize="22" fontFamily="system-ui, sans-serif">
-            {bar.label}
-          </text>
-          <rect x="290" y={bar.y - 24} width="470" height="34" rx="17" fill="#ede8fb" />
-          <rect x="290" y={bar.y - 24} width={4.7 * bar.value} height="34" rx="17" fill="url(#utilityFill)" />
-          <text x="780" y={bar.y} fill="#2a2240" fontSize="22" fontFamily="Georgia, serif" textAnchor="end">
-            {bar.value}%
-          </text>
-        </g>
-      ))}
-    </svg>
-  );
-}
-
-function AgentRolesVisual() {
-  const nodes = [
-    { x: 330, y: 42, w: 220, h: 78, label: "Main Orchestrator", sub: "Routes work, synthesizes outputs" },
-    { x: 70, y: 188, w: 220, h: 84, label: "Software Developer", sub: "Implements tools, edits code" },
-    { x: 330, y: 188, w: 220, h: 84, label: "General Problem Solver", sub: "Handles benchmark tasks directly" },
-    { x: 590, y: 188, w: 220, h: 84, label: "Archive Explorer", sub: "Finds what improved and failed" },
-    { x: 200, y: 348, w: 220, h: 84, label: "Design Reviewer", sub: "Critiques candidate changes" },
-    { x: 460, y: 348, w: 220, h: 84, label: "Reasoning Agent", sub: "o3-mini support on hard reasoning" },
+function ToolCountVisual() {
+  const agents = [
+    { agent: "main", tools: 9, tone: "bg-[rgba(102,73,255,0.14)] text-[var(--accent)]" },
+    { agent: "software_developer", tools: 12, tone: "bg-[rgba(255,73,135,0.12)] text-[var(--highlight)]" },
+    { agent: "general_problem_solver", tools: 12, tone: "bg-[rgba(255,73,135,0.12)] text-[var(--highlight)]" },
+    { agent: "archive_explorer", tools: 10, tone: "bg-[rgba(73,255,193,0.18)] text-[#14795f]" },
+    { agent: "meta_agent_design_reviewer", tools: 8, tone: "bg-[rgba(181,101,29,0.12)] text-[var(--stat-brown)]" },
+    { agent: "reasoning_agent", tools: 4, tone: "bg-[rgba(18,18,18,0.08)] text-[var(--ink-soft)]" },
   ];
+
   return (
-    <svg viewBox="0 0 880 500" className="h-full w-full">
-      <rect x="18" y="18" width="844" height="464" rx="28" fill="#fcfbf8" />
-      <text x="50" y="70" fill="#2a2240" fontSize="34" fontFamily="Georgia, serif">
-        SICA starts as a multi-agent organization chart
-      </text>
-      <text x="50" y="108" fill="#6c6780" fontSize="18" fontFamily="system-ui, sans-serif">
-        Each role adds prompt text, tool docs, state, and control tokens to the total harness
-      </text>
-      <path d="M440 120 L440 158" stroke="#6c52d1" strokeWidth="4" strokeLinecap="round" />
-      <path d="M180 272 L180 330 L310 330" stroke="#6c52d1" strokeWidth="3" fill="none" strokeLinecap="round" />
-      <path d="M440 272 L440 330" stroke="#6c52d1" strokeWidth="3" fill="none" strokeLinecap="round" />
-      <path d="M700 272 L700 330 L570 330" stroke="#6c52d1" strokeWidth="3" fill="none" strokeLinecap="round" />
-      <path d="M440 158 L180 158 L180 188" stroke="#6c52d1" strokeWidth="3" fill="none" strokeLinecap="round" />
-      <path d="M440 158 L700 158 L700 188" stroke="#6c52d1" strokeWidth="3" fill="none" strokeLinecap="round" />
-      <path d="M440 158 L440 188" stroke="#6c52d1" strokeWidth="3" fill="none" strokeLinecap="round" />
-      {nodes.map((node, index) => (
-        <g key={node.label}>
-          <rect x={node.x} y={node.y} width={node.w} height={node.h} rx="24" fill={index === 0 ? "#6c52d1" : "#ffffff"} stroke="#6c52d1" strokeWidth="2" />
-          <text x={node.x + 18} y={node.y + 30} fill={index === 0 ? "#fff8ef" : "#2a2240"} fontSize="23" fontFamily="Georgia, serif">
-            {node.label}
-          </text>
-          <text x={node.x + 18} y={node.y + 56} fill={index === 0 ? "rgba(255,248,239,0.86)" : "#6c6780"} fontSize="15" fontFamily="system-ui, sans-serif">
-            {node.sub}
-          </text>
-        </g>
-      ))}
-    </svg>
+    <div className="flex h-full flex-col justify-between rounded-[1.5rem] bg-[#fcfbf8] p-[1.2rem] text-[var(--ink)]">
+      <div>
+        <div className="mb-[1.2rem] flex items-end justify-between gap-4">
+          <div>
+            <div className="font-mono text-[0.68rem] font-semibold uppercase tracking-[0.16em] text-[var(--accent)]">
+              Tool Count by Agent
+            </div>
+          </div>
+
+        </div>
+
+        <div className="overflow-hidden rounded-[1.25rem] border border-[rgba(18,18,18,0.08)] bg-[rgba(255,255,255,0.84)]">
+          <div className="grid grid-cols-[2.2fr_0.8fr] border-b border-[rgba(18,18,18,0.08)] bg-[rgba(102,73,255,0.06)] px-5 py-3 font-mono text-[0.72rem] font-semibold uppercase tracking-[0.12em] text-[var(--muted)]">
+            <div>Agent</div>
+            <div className="text-center">Tools</div>
+          </div>
+
+          <div className="divide-y divide-[rgba(18,18,18,0.06)]">
+            {agents.map((entry) => (
+              <div key={entry.agent} className="grid grid-cols-[2.2fr_0.8fr] items-center px-5 py-3">
+                <div className="font-mono text-[0.88rem] font-medium text-[var(--ink)]">{entry.agent}</div>
+                <div className="flex justify-center">
+                  <span className={["min-w-[3rem] rounded-full px-3 py-1 text-center font-mono text-[0.85rem] font-semibold", entry.tone].join(" ")}>
+                    {entry.tools}
+                  </span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <div className="mt-5 overflow-hidden rounded-[1.25rem] border border-[rgba(255,73,135,0.2)] bg-[linear-gradient(135deg,rgba(255,73,135,0.08),rgba(102,73,255,0.08))]">
+        <div className="border-b border-[rgba(18,18,18,0.08)] px-5 py-3 font-mono text-[0.72rem] font-semibold uppercase tracking-[0.16em] text-[var(--highlight)]">
+          Comparison Point
+        </div>
+        <div className="grid grid-cols-[2.2fr_0.8fr] items-center px-5 py-3">
+          <div className="font-mono text-[0.88rem] font-medium text-[var(--ink)]">Claude Code</div>
+          <div className="flex justify-center">
+            <span className="min-w-[3rem] rounded-full bg-[rgba(255,73,135,0.12)] px-3 py-1 text-center font-mono text-[0.85rem] font-semibold text-[var(--highlight)]">
+              10
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 }
 
-function OverseerVisual() {
-  return (
-    <svg viewBox="0 0 880 500" className="h-full w-full">
-      <rect x="18" y="18" width="844" height="464" rx="28" fill="#fcfbf8" />
-      <text x="48" y="72" fill="#2a2240" fontSize="34" fontFamily="Georgia, serif">
-        An asynchronous overseer checks the run every 30 seconds
-      </text>
-      <text x="48" y="108" fill="#6c6780" fontSize="18" fontFamily="system-ui, sans-serif">
-        It can notify, steer, or cancel agents that drift, loop, or test changes incorrectly
-      </text>
-      <circle cx="440" cy="140" r="72" fill="#f0ebfe" stroke="#6c52d1" strokeWidth="4" />
-      <text x="440" y="134" textAnchor="middle" fill="#2a2240" fontSize="26" fontFamily="Georgia, serif">
-        Overseer
-      </text>
-      <text x="440" y="164" textAnchor="middle" fill="#6c6780" fontSize="15" fontFamily="system-ui, sans-serif">
-        monitor • notify • cancel
-      </text>
-    </svg>
-  );
-}
 
-function BenchmarkVisual() {
-  return (
-    <svg viewBox="0 0 880 500" className="h-full w-full">
-      <rect x="18" y="18" width="844" height="464" rx="28" fill="#fcfbf8" />
-      <text x="50" y="74" fill="#2a2240" fontSize="34" fontFamily="Georgia, serif">
-        The paper mixes three benchmark styles
-      </text>
-      <text x="50" y="112" fill="#6c6780" fontSize="18" fontFamily="system-ui, sans-serif">
-        Each one supports a different strength of claim
-      </text>
-      {[
-        { x: 58, y: 168, w: 236, title: "SWE-Bench Verified", body: "real repositories, real issues, patch judged by tests", color: "#6c52d1" },
-        { x: 322, y: 168, w: 236, title: "LiveCodeBench", body: "coding-problem benchmark with easy / medium / hard mix", color: "#f2a562" },
-        { x: 586, y: 168, w: 236, title: "Synthetic tasks", body: "file editing and symbol lookup shaped around agent tools", color: "#2d8b79" },
-      ].map((card) => (
-        <g key={card.title}>
-          <rect x={card.x} y={card.y} width={card.w} height="176" rx="24" fill="#ffffff" stroke={card.color} strokeWidth="3" />
-          <rect x={card.x} y={card.y} width={card.w} height="16" rx="8" fill={card.color} />
-          <text x={card.x + 20} y={card.y + 58} fill="#2a2240" fontSize="24" fontFamily="Georgia, serif">
-            {card.title}
-          </text>
-          <text x={card.x + 20} y={card.y + 96} fill="#6c6780" fontSize="17" fontFamily="system-ui, sans-serif">
-            {card.body}
-          </text>
-        </g>
-      ))}
-    </svg>
-  );
-}
 
 function PromptingTimelineVisual({ activeStep = 4 }: { activeStep?: 1 | 2 | 3 | 4 }) {
   const steps = [
@@ -163,11 +100,7 @@ function PromptingTimelineVisual({ activeStep = 4 }: { activeStep?: 1 | 2 | 3 | 
         strokeDasharray="6 4"
       />
       
-      {/* Arrow at the end */}
-      <polygon 
-        points={`${startX + (stepWidth + gap) * 2 + stepWidth / 2 + 12},${startY + stepHeight + 25} ${startX + (stepWidth + gap) * 2 + stepWidth / 2},${startY + stepHeight + 18} ${startX + (stepWidth + gap) * 2 + stepWidth / 2},${startY + stepHeight + 32}`}
-        fill="#ff4987"
-      />
+   
       
       {steps.map((step, index) => {
         const x = startX + index * (stepWidth + gap);
@@ -295,6 +228,54 @@ function SourcePills({ links }: { links: { label: string; href: string }[] }) {
   );
 }
 
+function CodePanel({ title, body }: { title: string; body: string }) {
+  return (
+    <div className="overflow-hidden rounded-xl border border-[rgba(18,18,18,0.08)] bg-[rgba(255,255,255,0.82)] shadow-[0_8px_24px_rgba(102,73,255,0.06)]">
+      <div className="border-b border-[rgba(18,18,18,0.08)] bg-[rgba(102,73,255,0.06)] px-4 py-3 font-mono text-[0.72rem] font-semibold uppercase tracking-[0.12em] text-[var(--accent)]">
+        {title}
+      </div>
+      <pre className="m-0 overflow-auto whitespace-pre-wrap px-4 py-4 font-mono text-[clamp(0.62rem,0.78vw,0.78rem)] leading-[1.5] text-[var(--ink-soft)]">
+        {body}
+      </pre>
+    </div>
+  );
+}
+
+function CompactTable({
+  headers,
+  rows,
+}: {
+  headers: string[];
+  rows: string[][];
+}) {
+  return (
+    <div className="overflow-hidden rounded-xl border border-[rgba(18,18,18,0.08)] bg-[rgba(255,255,255,0.82)] shadow-[0_8px_24px_rgba(102,73,255,0.06)]">
+      <table className="w-full border-collapse">
+        <thead>
+          <tr className="bg-[rgba(102,73,255,0.06)]">
+            {headers.map((header) => (
+              <th key={header} className="border-b border-[rgba(18,18,18,0.08)] px-3 py-2 text-left font-mono text-[0.68rem] font-semibold uppercase tracking-[0.1em] text-[var(--accent)]">
+                {header}
+              </th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {rows.map((row, rowIndex) => (
+            <tr key={rowIndex} className={rowIndex % 2 === 0 ? "bg-[rgba(255,255,255,0.72)]" : "bg-[rgba(18,18,18,0.02)]"}>
+              {row.map((cell, cellIndex) => (
+                <td key={`${rowIndex}-${cellIndex}`} className="border-b border-[rgba(18,18,18,0.05)] px-3 py-2 font-mono text-[clamp(0.58rem,0.72vw,0.72rem)] text-[var(--ink-soft)]">
+                  {cell}
+                </td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+}
+
 function SlideFrame({
   slideNumber,
   eyebrow,
@@ -304,8 +285,11 @@ function SlideFrame({
   visual,
   image,
   imageAlt,
+  imageWrapperClassName,
+  imageClassName,
   image2,
   image2Alt,
+  wide = false,
   appendix = false,
   printMode = false,
   children,
@@ -319,8 +303,11 @@ function SlideFrame({
   visual?: ReactNode;
   image?: string;
   imageAlt?: string;
+  imageWrapperClassName?: string;
+  imageClassName?: string;
   image2?: string;
   image2Alt?: string;
+  wide?: boolean;
   appendix?: boolean;
   printMode?: boolean;
   children?: ReactNode;
@@ -335,7 +322,7 @@ function SlideFrame({
       ].join(" ")}
     >
       <div className={["absolute inset-y-0 left-0 w-[5px]", appendix ? "bg-[var(--muted)] opacity-40" : "bg-[var(--accent)]"].join(" ")} />
-      <div className={["grid w-full max-w-[1600px] gap-[3vw] pl-6", hasVisual ? "grid-cols-1 items-start lg:grid-cols-[1.1fr_0.9fr]" : "max-w-[900px] grid-cols-1"].join(" ")}>
+      <div className={["grid w-full max-w-[1600px] gap-[3vw] pl-6", hasVisual ? "grid-cols-1 items-start lg:grid-cols-[1.1fr_0.9fr]" : wide ? "grid-cols-1" : "max-w-[900px] grid-cols-1"].join(" ")}>
         <div className="flex flex-col gap-[1.5vh]">
           <span className="font-mono text-[clamp(0.6rem,0.8vw,0.75rem)] font-medium uppercase tracking-[0.15em] text-[var(--accent)]">
             No. {String(slideNumber).padStart(2, "0")}
@@ -353,9 +340,9 @@ function SlideFrame({
         </div>
         {hasVisual ? (
           <div className="flex flex-col gap-[1.5vh]">
-            {visual ? <div className="mt-50 overflow-hidden rounded-xl border border-[rgba(102,73,255,0.12)] bg-[rgba(255,255,255,0.8)] p-[1vw] shadow-[0_8px_24px_rgba(102,73,255,0.06)] [&_svg]:max-h-[60vh] [&_svg]:w-full">{visual}</div> : null}
-            {image ? <div className="mt-50 overflow-hidden rounded-xl border border-[rgba(102,73,255,0.12)] bg-[rgba(255,255,255,0.75)] p-[0.8vw] shadow-[0_8px_24px_rgba(102,73,255,0.06)]"><img src={image} alt={imageAlt ?? "Slide visual"} className="block max-h-[55vh] w-full rounded-lg object-contain" /></div> : null}
-            {image2 ? <div className="mt-50 overflow-hidden rounded-xl border border-[rgba(102,73,255,0.12)] bg-[rgba(255,255,255,0.75)] p-[0.8vw] shadow-[0_8px_24px_rgba(102,73,255,0.06)]"><img src={image2} alt={image2Alt ?? "Secondary visual"} className="block max-h-[45vh] w-full rounded-lg object-contain" /></div> : null}
+            {visual ? <div className="overflow-hidden rounded-xl border border-[rgba(102,73,255,0.12)] bg-[rgba(255,255,255,0.8)] p-[1vw] shadow-[0_8px_24px_rgba(102,73,255,0.06)] [&_svg]:max-h-[60vh] [&_svg]:w-full">{visual}</div> : null}
+            {image ? <div className={["overflow-hidden rounded-xl border border-[rgba(102,73,255,0.12)] bg-[rgba(255,255,255,0.75)] p-[0.8vw] shadow-[0_8px_24px_rgba(102,73,255,0.06)]", imageWrapperClassName ?? ""].join(" ")}><img src={image} alt={imageAlt ?? "Slide visual"} className={["block max-h-[55vh] w-full rounded-lg object-contain", imageClassName ?? ""].join(" ")} /></div> : null}
+            {image2 ? <div className="overflow-hidden rounded-xl border border-[rgba(102,73,255,0.12)] bg-[rgba(255,255,255,0.75)] p-[0.8vw] shadow-[0_8px_24px_rgba(102,73,255,0.06)]"><img src={image2} alt={image2Alt ?? "Secondary visual"} className="block max-h-[45vh] w-full rounded-lg object-contain" /></div> : null}
           </div>
         ) : null}
       </div>
@@ -389,7 +376,7 @@ function ProgressNav({ currentIndex, setCurrentIndex }: { currentIndex: number; 
   );
 }
 
-function renderSlide(slideIndex: number, printMode = false) {
+function renderSlide(slideIndex: number, printMode = false, onNavigate?: (index: number) => void) {
   switch (slideIndex) {
     // Slide 1
     case 0:
@@ -421,7 +408,7 @@ function renderSlide(slideIndex: number, printMode = false) {
         <SlideFrame slideNumber={2} eyebrow="Claim" title="From 17% to 53%" thesis="A coding agent can edit its own codebase, benchmark itself, keep the best version in an archive, and improve measured utility over time without any weight updates." printMode={printMode}>
           <div className="mt-[1vh] grid max-w-[32rem] grid-cols-2 gap-[1vw]">
             <StatCard label="method" value="No Weight Updates" />
-            <StatCard label="improvement" value="Edit Agent Harness Code" />
+            <StatCard label="improvement" value="Edit Agent Scaffold Code" />
             <StatCard label="evaluation" value="Benchmarks" />
             <StatCard label="selection" value="First Self-Improving Agent*" />
           </div>
@@ -434,7 +421,7 @@ function renderSlide(slideIndex: number, printMode = false) {
     // Slide 3
     case 2:
       return (
-        <SlideFrame slideNumber={3} eyebrow="Context" title="From Prompting strategies to Agent Harnesses" thesis="A lot of LLM progress comes from scaffolding rather than base-model changes, so automating scaffold design is an obvious next step." visual={<PromptingTimelineVisual activeStep={1} />} printMode={printMode} />
+        <SlideFrame slideNumber={3} eyebrow="Context" title="From Prompting strategies to Agent Scaffold" thesis="A lot of LLM progress comes from scaffolding rather than base-model changes, so automating scaffold design is an obvious next step." visual={<PromptingTimelineVisual activeStep={1} />} printMode={printMode} />
       );
 
     // Slide 4
@@ -463,7 +450,7 @@ function renderSlide(slideIndex: number, printMode = false) {
     // Slide 7
     case 6:
       return (
-        <SlideFrame slideNumber={7} eyebrow="Method Detail" title="The pseudocode makes the self-referential step explicit" thesis="Algorithm 1 shows the key move: at each iteration the best archived agent becomes the one that generates the next candidate." image="/notes/algorithm.png" imageAlt="Algorithm figure" printMode={printMode} />
+        <SlideFrame slideNumber={7} eyebrow="Method Detail" title="The loop works through evaluation, archive selection, and one new edit" thesis="At each iteration, the current agent is benchmarked, the archive records agent-plus-score history, and the best archived agent becomes the improver that proposes the next version." image="/sica_loop.svg" imageAlt="SICA loop visual" printMode={printMode} />
       );
 
     // Slide 8
@@ -475,13 +462,13 @@ function renderSlide(slideIndex: number, printMode = false) {
     // Slide 9
     case 8:
       return (
-        <SlideFrame slideNumber={9} eyebrow="Architecture" title="The starting point is already a staffed multi-agent company" thesis="SICA begins with multiple specialized roles, each carrying prompt logic, tool descriptions, and control overhead, so the base agent is not remotely minimal." visual={<AgentRolesVisual />} printMode={printMode} />
+        <SlideFrame slideNumber={9} eyebrow="Architecture" title="The starting point is already a staffed multi-agent company" thesis="SICA begins with multiple specialized roles, each carrying prompt logic, tool descriptions, and control overhead." image="/agent_hierarchy.svg" imageAlt="Test image" printMode={printMode} />
       );
 
     // Slide 10
     case 9:
       return (
-        <SlideFrame slideNumber={10} eyebrow="Oversight" title="An overseer agent watches the run and can intervene" thesis="The overseer checks traces every 30 seconds, sends steering messages, and can cancel agents that loop or test changes incorrectly." visual={<OverseerVisual />} printMode={printMode} />
+        <SlideFrame slideNumber={10} eyebrow="Oversight" title="An overseer agent watches the run and can intervene" thesis="The overseer checks traces every 30 seconds, sends steering messages, and can cancel agents that loop or test changes incorrectly." image="/overseer.svg" imageAlt="Oversight agent figure" printMode={printMode} />
       );
 
     // Slide 11
@@ -493,30 +480,25 @@ function renderSlide(slideIndex: number, printMode = false) {
     // Slide 12
     case 11:
       return (
-        <SlideFrame slideNumber={12} eyebrow="Scaffold Critique" title="The base agent starts overloaded compared with lean coding harnesses" thesis="The initial system bundles many tools, roles, and prompt assumptions before self-improvement even begins, which makes self-repair a plausible interpretation of later gains." printMode={printMode}>
-          <div className="mt-[1vh] grid max-w-[32rem] grid-cols-2 gap-[1vw]">
-            <InfoCard title="empirical risk" body="A bloated baseline can make later improvements look larger than they would against a leaner harness." />
-            <InfoCard title="interpretive risk" body="The story shifts from invention toward undoing an overbuilt starting scaffold." />
-          </div>
-        </SlideFrame>
+        <SlideFrame slideNumber={12} eyebrow="Scaffold Critique" title="The base agent starts with a lot of tools/context compared with lean other Scafoflds" thesis="The initial system bundles many tools, roles, and prompt assumptions before self-improvement even begins, which makes self-repair a plausible interpretation of later gains." visual={<ToolCountVisual />} printMode={printMode}/>
       );
 
     // Slide 13
     case 12:
       return (
-        <SlideFrame slideNumber={13} eyebrow="Core Critique" title="Too many tools and too much text may be the hidden baseline problem" thesis="If instruction-heavy, tool-rich harnesses degrade performance, then some of SICA’s measured gain may simply be the agent removing self-inflicted friction." image="/notes/code act vs. tool calls.png" imageAlt="CodeAct comparison" printMode={printMode} />
+        <SlideFrame slideNumber={13} eyebrow="Core Critique" title="Too many tools and too much context" thesis="If instruction-heavy, tool-rich scaffolds degrade performance, then some of SICA’s measured gain may simply be the agent removing self-inflicted friction." image="/notes/code act vs. tool calls.png" imageAlt="CodeAct comparison" image2="/notes/context rot.png" image2Alt="Context rot comparison" printMode={printMode} sourceLinks={[{ label: "Code Act (Apple)", href: "https://arxiv.org/pdf/2402.01030" }, { label: "Context Rot (Chroma)", href: "https://research.trychroma.com/context-rot" }]} />
       );
 
     // Slide 14
     case 13:
       return (
-        <SlideFrame slideNumber={14} eyebrow="Evaluation Setup" title="The evaluation story mixes strong and weak evidence" thesis="SWE-Bench Verified is the strongest benchmark in the paper, LiveCodeBench is harder to compare cleanly, and the synthetic tasks are the most benchmark-shaped." visual={<BenchmarkVisual />} printMode={printMode} />
+        <SlideFrame slideNumber={14} eyebrow="Evaluation Setup" title="Three Benchmarks" thesis="50 random samples from SWE-Bench Verified, LiveCodeBench, and some synthetic tasks. Total cost ~7000 USD" image="Benchmark.png" imageAlt="Benchmarks figure" printMode={printMode} />
       );
 
     // Slide 15
     case 14:
       return (
-        <SlideFrame slideNumber={15} eyebrow="Benchmark 1" title="SWE-Bench Verified is the paper’s strongest empirical result" thesis="This benchmark looks most like real coding-agent behavior: real repository, real issue, patch generation, and tests as the judge."  printMode={printMode}>
+        <SlideFrame slideNumber={15} eyebrow="Benchmark 1" title="SWE-Bench Verified" thesis="This benchmark looks most like real coding-agent behavior: real repository, real issue, patch generation, and tests as the judge." image="/SWEBench.svg" printMode={printMode}>
           <div className="mt-[1vh] grid max-w-[32rem] grid-cols-2 gap-[1vw]">
             <StatCard label="Initial" value="17%" />
             <StatCard label="Final" value="53%" />
@@ -527,7 +509,7 @@ function renderSlide(slideIndex: number, printMode = false) {
     // Slide 16
     case 15:
       return (
-        <SlideFrame slideNumber={16} eyebrow="Benchmark 2" title="LiveCodeBench improves, but the comparison protocol is messy" thesis="The paper reports 65% to 71% on a 50-problem random sample, but difficulty mix matters enough that the result is not cleanly comparable to published leaderboard numbers." printMode={printMode}>
+        <SlideFrame slideNumber={16} eyebrow="Benchmark 2" title="LiveCodeBench" thesis="The paper reports 65% to 71% on a 50-problem random sample, but difficulty mix matters enough that the result is not cleanly comparable to published leaderboard numbers." image="/lcb.svg"printMode={printMode}>
           <div className="mt-[1vh] grid max-w-[32rem] grid-cols-2 gap-[1vw]">
             <StatCard label="Initial" value="65%" />
             <StatCard label="Final" value="71%" />
@@ -549,24 +531,20 @@ function renderSlide(slideIndex: number, printMode = false) {
     // Slide 18
     case 17:
       return (
-        <SlideFrame slideNumber={18} eyebrow="Main Result" title="The improvement curve is most convincing as annotated agent engineering" thesis="The best evidence is not just that utility rises, but that each jump lines up with concrete scaffold changes like Smart Edit, summarization, verification, and symbol tools." image="/notes/immprovement.png" imageAlt="Improvement curve" printMode={printMode} />
+        <SlideFrame slideNumber={18} eyebrow="Main Result" title="The improvement curve" thesis="The best evidence is not just that utility rises, but that each jump lines up with concrete scaffold changes like Smart Edit, summarization, verification, and symbol tools." image="/notes/immprovement.png" imageAlt="Improvement curve" printMode={printMode} />
       );
 
     // Slide 19
     case 18:
       return (
-        <SlideFrame slideNumber={19} eyebrow="Interpretation" title="What actually improved was mostly the scaffold" thesis="The pattern of gains looks much more like automated agent engineering than like open-ended self-improvement in the strong sense." printMode={printMode}>
-          <div className="mt-[1vh] grid max-w-[32rem] grid-cols-2 gap-[1vw]">
-            <InfoCard title="short version" body="The agent gets better at being a practical coding harness, not at becoming generally self-improving in an unbounded way." />
-            <InfoCard title="why that matters" body="That interpretation is narrower, but it is also much better supported by the evidence in the paper." />
-          </div>
+        <SlideFrame slideNumber={19} eyebrow="Benchmark Critique" title="Comparison to other benchmarks is hard" thesis="LiveCodeBench is sampled across different difficulty levels, the synthetic tasks are only used in this paper so this only leaves SWE-Bench Verified as a comparable benchmark." printMode={printMode}>
         </SlideFrame>
       );
 
     // Slide 20
     case 19:
       return (
-        <SlideFrame slideNumber={20} eyebrow="Practical Critique" title="Compared with Anthropic’s simpler baseline, the absolute gain looks less dramatic" thesis="Anthropic reported about 49% on SWE-Bench Verified with a much leaner Sonnet-based harness, so SICA’s 53% looks modest once you compare it to strong simple systems."  printMode={printMode}>
+        <SlideFrame slideNumber={20} eyebrow="Practical Critique" title="Compared with Anthropic’s simpler baseline, the absolute gain looks less dramatic" thesis="Anthropic reported about 49% on SWE-Bench Verified with a much leaner (file edit + bash tool) Sonnet-based Scaffold, so SICA’s 53% looks modest once you compare it to strong simple systems." image="/anthropic.webp" imageWrapperClassName="mx-auto w-1/2" printMode={printMode}>
           <div className="mt-[1vh] grid max-w-[32rem] grid-cols-2 gap-[1vw]">
             <StatCard label="SICA Final" value="53%" />
             <StatCard label="Anthropic Sonnet" value="~49%" />
@@ -577,10 +555,8 @@ function renderSlide(slideIndex: number, printMode = false) {
     // Slide 21
     case 20:
       return (
-        <SlideFrame slideNumber={21} eyebrow="Claim Narrowing" title="The reasoning benchmarks barely move" thesis="On AIME 2024 and GPQA Diamond, SICA provides little improvement, which suggests the loop helps most when orchestration and tool use matter more than raw reasoning." printMode={printMode}>
+        <SlideFrame slideNumber={21} eyebrow="Claim Narrowing" title="The reasoning benchmarks barely move" thesis="On AIME 2024 and GPQA Diamond, SICA provides little improvement, which suggests the loop helps most when orchestration and tool use matter more than raw reasoning." image="/reasoning_performance.png" printMode={printMode}>
           <div className="mt-[1vh] grid max-w-[32rem] grid-cols-2 gap-[1vw]">
-            <InfoCard title="reading" body="SICA looks more like a coding-agent harness optimizer than a general recursive self-improvement mechanism." />
-            <InfoCard title="evidence value" body="The weak result here is useful because it narrows the claim instead of supporting a universal story." />
           </div>
         </SlideFrame>
       );
@@ -588,27 +564,22 @@ function renderSlide(slideIndex: number, printMode = false) {
     // Slide 22
     case 21:
       return (
-        <SlideFrame slideNumber={22} eyebrow="Sharper Critique" title="The harness may be the bottleneck, and the agent may be learning to undo it" thesis="My strongest hypothesis is that the initial scaffold hurts performance enough that part of SICA’s success comes from removing unnecessary prompt and tool overhead." image="/notes/agents_md.png" imageAlt="Agents md chart" image2="/notes/context alone hurts performance.png" image2Alt="Context clutter chart" printMode={printMode} />
+        <SlideFrame slideNumber={22} eyebrow="Sharper Critique" title="The harness may be the bottleneck, and the agent may be learning to undo it" thesis="My strongest hypothesis is that the initial scaffold hurts performance enough that part of SICA’s success comes from removing unnecessary prompt and tool overhead." image="/notes/agents_md.png" imageAlt="Agents md chart" image2="/notes/context alone hurts performance.png" image2Alt="Context clutter chart" printMode={printMode} sourceLinks={[{ label: "Agents MD", href: "https://arxiv.org/pdf/2602.11988" }, { label: "Context Length Alone Hurts LLM Performance", href: "https://arxiv.org/pdf/2510.05381v1" }]} />
       );
 
     // Slide 23
     case 22:
       return (
-        <SlideFrame slideNumber={23} eyebrow="Discussion" title="Are we seeing genuine gains or benchmark-local test-time learning?" thesis="A static benchmark suite with task-aligned utilities creates a real risk that the loop is learning the evaluation setup rather than discovering broadly transferable improvements."  printMode={printMode}>
-          <div className="mt-[1vh] grid max-w-[32rem] grid-cols-2 gap-[1vw]">
-            <InfoCard title="class question" body="What evidence would convince us that the discovered changes transfer beyond this benchmark and harness combination?" />
-            <InfoCard title="missing evidence" body="The paper does not yet show a strong transfer story to unseen or dynamically generated tasks." />
-          </div>
+        <SlideFrame slideNumber={23} eyebrow="Discussion" title="Are we overfitting to the Benchmarks?" thesis="A static benchmark suite with task-aligned utilities creates a real risk that the loop is learning the evaluation setup rather than discovering broadly transferable improvements."  printMode={printMode}>
+
         </SlideFrame>
       );
 
     // Slide 24
     case 23:
       return (
-        <SlideFrame slideNumber={24} eyebrow="Current Context" title="The paper already looks somewhat dated against newer coding systems" thesis="Even if SICA is first in its exact category, the practical coding-agent landscape moved quickly enough that the paper now looks stronger as a conceptual milestone than as a current-state system result."  printMode={printMode}>
+        <SlideFrame slideNumber={24} eyebrow="Current Context" title="The paper already looks somewhat dated against newer coding systems" thesis="Even if SICA is first in its exact category, the practical coding-agent landscape moved quickly enough that the paper now looks stronger as a conceptual milestone than as a current-state system result."  image="/alternative.png"printMode={printMode}>
           <div className="mt-[1vh] grid max-w-[32rem] grid-cols-2 gap-[1vw]">
-            <InfoCard title="historical value" body="It may age well as a first self-editing scaffold paper." />
-            <InfoCard title="practical value" body="It ages less well as a template for current frontier coding-agent design." />
           </div>
         </SlideFrame>
       );
@@ -616,10 +587,12 @@ function renderSlide(slideIndex: number, printMode = false) {
     // Slide 25
     case 24:
       return (
-        <SlideFrame slideNumber={25} eyebrow="Future Work" title="A stronger follow-up would jointly improve the model, the harness, and the evaluation" thesis="The next serious step is to combine scaffold evolution with model adaptation, leaner baselines, and dynamic benchmarks that cannot be overfit as easily."  printMode={printMode}>
-          <div className="mt-[1vh] grid max-w-[32rem] grid-cols-2 gap-[1vw]">
-            <InfoCard title="mechanism" body="Optimize the harness and the model together rather than freezing the model forever." />
-            <InfoCard title="evaluation" body="Separate within-loop gains from external-transfer gains on fresher tasks." />
+        <SlideFrame slideNumber={25} eyebrow="Future Work" title="Future Work" thesis="The next serious step is to combine scaffold evolution with model adaptation, leaner baselines, and dynamic benchmarks that cannot be overfit as easily."  printMode={printMode}>
+          
+           <div className="mt-[1vh] grid max-w-[64rem] grid-cols-2 gap-[1vw]">
+              <StatCard label="Scaffold Evolution + Model Adaptation" value="Update Weights And Scaffold" />
+              <StatCard label="Better Benchmarks" value="Comparable Benchmarks" />
+              <StatCard label="Dynamic Benchmarks" value="Dynamicially adapt Benchmarks alongside Agent" />
           </div>
         </SlideFrame>
       );
@@ -627,10 +600,27 @@ function renderSlide(slideIndex: number, printMode = false) {
     // Slide 26
     case 25:
       return (
-        <SlideFrame slideNumber={26} eyebrow="Verdict" title="I buy the loop. I do not yet buy the mythology." thesis="SICA is a real proof that an agent can edit its own scaffold and improve benchmark utility, but the best evidence points toward automated agent engineering, not broad open-ended recursive self-improvement." visual={<PromptingTimelineVisual activeStep={4} />} printMode={printMode}>
-          <div className="mt-[1vh] grid max-w-[32rem] grid-cols-2 gap-[1vw]">
-            <StatCard label="Most Persuasive" value="Annotated scaffold gains" />
-            <StatCard label="Biggest Caveat" value="Heavy starting harness" />
+        <SlideFrame slideNumber={26} eyebrow="Conclusion" title="Conclusion" wide printMode={printMode}>
+          <div className="mx-auto mt-[1vh] grid max-w-[70rem] grid-cols-2 justify-items-center gap-[1vw]">
+            {[
+              { title: "Method", image: "/sica_loop.svg", alt: "Method visual from slide 7", target: 6 },
+              { title: "Benchmarks", image: "/Benchmark.png", alt: "Benchmark visual from slide 14", target: 13 },
+              { title: "Improvement", image: "/notes/immprovement.png", alt: "Improvement visual from slide 18", target: 17 },
+              { title: "Current Context", image: "/alternative.png", alt: "Visual from slide 24", target: 23 },
+            ].map((item) => (
+              <button
+                key={item.title}
+                type="button"
+                onClick={() => onNavigate?.(item.target)}
+                disabled={printMode || !onNavigate}
+                className="flex w-full max-w-[32rem] cursor-pointer flex-col items-start overflow-hidden rounded-xl border border-[rgba(102,73,255,0.12)] bg-[rgba(255,255,255,0.78)] p-[0.8vw] text-left shadow-[0_8px_24px_rgba(102,73,255,0.06)] transition-all duration-200 ease-out hover:-translate-y-[2px] hover:border-[rgba(102,73,255,0.3)] disabled:cursor-default disabled:hover:translate-y-0 disabled:hover:border-[rgba(102,73,255,0.12)]"
+              >
+                <div className="mb-[0.6vh] font-mono text-[clamp(0.58rem,0.72vw,0.7rem)] font-semibold uppercase tracking-[0.12em] text-[var(--accent)]">
+                  {item.title}
+                </div>
+                <img src={item.image} alt={item.alt} className="block h-[22vh] w-full rounded-lg object-contain" />
+              </button>
+            ))}
           </div>
         </SlideFrame>
       );
@@ -638,32 +628,41 @@ function renderSlide(slideIndex: number, printMode = false) {
     // Slide 27
     case 26:
       return (
-        <SlideFrame slideNumber={27} eyebrow="Appendix / Asset Bank" title="Reference slide: key figures to revisit while polishing the deck" thesis="Keep one place in the deck for the main visual evidence so you can quickly pull visuals into revised slides without re-reading the paper markdown each time." appendix visual={<PromptingTimelineVisual activeStep={4} />} printMode={printMode}>
-          <div className="mt-[1vh] grid max-w-[32rem] grid-cols-2 gap-[1vw]">
-            <InfoCard title="core figures" body="Loop figure, algorithm, utility, system prompt, and improvement curve." />
-            <InfoCard title="workflow use" body="This appendix is for building and revising the talk, not for presenting in full." />
-          </div>
-        </SlideFrame>
+        <SlideFrame slideNumber={27} eyebrow="Backup 1" title="Utility Function" thesis="The paper scores agents with a weighted utility over benchmark score, time, and cost, then applies a timeout penalty." image="/notes/utility function.png" imageAlt="Utility function equation" appendix printMode={printMode} />
       );
 
     // Slide 28
     case 27:
       return (
-        <SlideFrame slideNumber={28} eyebrow="Appendix / Prompt Reference" title="Reference slide: the prompts show how heavily the behavior is already engineered" thesis="The appendix prompts do not read like a blank-slate agent. They read like a strongly opinionated workflow plus monitoring logic." appendix visual={<PromptingTimelineVisual activeStep={4} />} printMode={printMode}>
-          <div className="mt-[1vh] grid max-w-[32rem] grid-cols-2 gap-[1vw]">
-            <InfoCard title="main prompt" body="Delegates, routes, and constrains the system’s top-level behavior." />
-            <InfoCard title="worker + overseer" body="Encodes coding workflow habits and defines when agents should be steered or canceled." />
-          </div>
-        </SlideFrame>
+        <SlideFrame slideNumber={28} eyebrow="Backup 2" title="Algorithm" thesis="Algorithm 1 gives the clean high-level loop: select the best archived agent, let it edit the codebase, evaluate, archive, and repeat." image="/notes/algorithm.png" imageAlt="Algorithm screenshot" appendix printMode={printMode} />
       );
 
     // Slide 29
     case 28:
       return (
-        <SlideFrame slideNumber={29} eyebrow="Appendix / Tool Inventory" title="Reference slide: the tool inventory is already crowded before self-improvement" thesis="Showing the initial tool and role matrix makes the context-bloat critique concrete instead of merely stylistic." appendix visual={<PromptingTimelineVisual activeStep={4} />} printMode={printMode}>
-          <div className="mt-[1vh] grid max-w-[32rem] grid-cols-2 gap-[1vw]">
-            <InfoCard title="main point" body="Even the base agent is already a substantial engineered scaffold." />
-            <InfoCard title="use case" body="Keep this as backup for pushback on the claim that the starting harness is overbuilt." />
+        <SlideFrame slideNumber={29} eyebrow="Backup 3" title="Benchmark Results" thesis="Table 1 is the compact view of the full run: synthetic tasks move a lot, SWE-Bench Verified rises materially, and LiveCodeBench improves more modestly." appendix wide printMode={printMode}>
+          <div className="mx-auto mt-[1vh] w-full max-w-[74rem]">
+            <CompactTable
+              headers={["Iter", "File", "Sym", "SWE-Bv", "LCB", "Cost", "Time", "Tokens", "% Cached"]}
+              rows={[
+                ["0", "0.82", "0.35", "0.17", "0.65", "1.91", "130.2", "0.24", "32.5"],
+                ["1", "0.87", "0.32", "0.14", "0.62", "1.71", "123.8", "0.24", "33.6"],
+                ["2", "0.92", "0.31", "0.17", "0.58", "2.45", "151.4", "0.26", "34.3"],
+                ["3", "0.82", "0.33", "0.22", "0.64", "1.84", "126.9", "0.29", "31.9"],
+                ["4", "0.88", "0.31", "0.38", "0.54", "2.70", "148.3", "0.26", "30.9"],
+                ["5", "0.89", "0.31", "0.30", "0.59", "2.17", "134.8", "0.23", "36.9"],
+                ["6", "0.96", "0.31", "0.37", "0.64", "2.21", "134.1", "0.25", "36.1"],
+                ["7", "0.92", "0.35", "0.33", "0.58", "2.15", "134.9", "0.23", "38.2"],
+                ["8", "0.93", "0.33", "0.27", "0.64", "2.03", "128.5", "0.26", "36.4"],
+                ["9", "0.88", "0.40", "0.47", "0.61", "2.03", "126.3", "0.27", "38.3"],
+                ["10", "0.87", "0.41", "0.46", "0.66", "1.77", "107.0", "0.22", "40.9"],
+                ["11", "0.89", "0.43", "0.44", "0.70", "2.25", "129.6", "0.27", "36.9"],
+                ["12", "0.91", "0.38", "0.44", "0.64", "1.58", "103.9", "0.26", "39.0"],
+                ["13", "0.86", "0.40", "0.27", "0.61", "1.66", "113.3", "0.29", "37.2"],
+                ["14", "0.94", "0.34", "0.53", "0.67", "2.20", "117.1", "0.25", "37.2"],
+                ["15", "0.91", "0.40", "0.51", "0.71", "1.70", "114.5", "0.30", "36.3"],
+              ]}
+            />
           </div>
         </SlideFrame>
       );
@@ -671,7 +670,252 @@ function renderSlide(slideIndex: number, printMode = false) {
     // Slide 30
     case 29:
       return (
-        <SlideFrame slideNumber={30} eyebrow="Backup / Context Evidence" title="Reference slide: evidence that more instructions and more whitespace can hurt" thesis="There is direct empirical reason to suspect that instruction clutter and expanded context windows can harm model behavior." image="/notes/context rot.png" imageAlt="Context rot chart" image2="/notes/system prompt.png" image2Alt="System prompt context stack" appendix printMode={printMode} />
+        <SlideFrame slideNumber={30} eyebrow="Backup 4" title="All Discovered Improvements" thesis="Section D shows that most of the discovered changes are tooling and harness optimizations around editing, summarization, verification, and symbol lookup." appendix wide printMode={printMode}>
+          <div className="mx-auto mt-[1vh] grid w-full max-w-[74rem] grid-cols-2 gap-[1vw]">
+            <InfoCard title="1" body="Smart Editor: pick the right edit strategy for the change." />
+            <InfoCard title="2" body="Quick Overwrite Tool: reduce token-heavy full overwrites." />
+            <InfoCard title="3" body="Diff-Enhanced Smart Editor: smarter diff and pattern editing." />
+            <InfoCard title="4" body="Simplified DiffVerifier Tests: improve maintainability." />
+            <InfoCard title="5" body="Code Context Summarizer: summarize code context with ripgrep." />
+            <InfoCard title="6" body="SmartEditor Input Normalizer: improve edit reliability." />
+            <InfoCard title="7" body="Enhanced File Edit Verification: track file state more carefully." />
+            <InfoCard title="8" body="Minimal Diff Output Optimization: shrink diff context." />
+            <InfoCard title="9" body="AST Symbol Locator: add AST-based navigation." />
+            <InfoCard title="10" body="Optimized File Edit Routing: route file tasks explicitly in MainAgent." />
+            <InfoCard title="11" body="Enhanced File Size Optimization: threshold large files around 100 KB." />
+            <InfoCard title="12" body="Hybrid Symbol Locator: combine ripgrep candidates with AST verification." />
+            <InfoCard title="13" body="Context-Sensitive Diff Minimization: use AST or pattern-aware diff context." />
+            <InfoCard title="14" body="Optimized AST Parsing in Hybrid Symbol Locator: parse only relevant regions." />
+          </div>
+        </SlideFrame>
+      );
+
+    // Slide 31
+    case 30:
+      return (
+        <SlideFrame slideNumber={31} eyebrow="Backup 5" title="Agent Prompt Context" thesis="The system prompt screenshot makes the prompt surface visible: tools, sub-agents, instructions, and context scaffolding are all loaded before the agent even starts work." image="/notes/system prompt.png" imageAlt="System prompt screenshot" appendix printMode={printMode} />
+      );
+
+    // Slide 32
+    case 31:
+      return (
+        <SlideFrame slideNumber={32} eyebrow="Backup 6" title="Main Agent Prompt" thesis="The top-level agent is mostly a router: it delegates, preserves the problem statement, and coordinates sub-agents rather than doing the substantive work itself." appendix wide printMode={printMode}>
+          <div className="mx-auto mt-[1vh] w-full max-w-[74rem]">
+            <CodePanel
+              title="Appendix A: Main Agent Prompt"
+              body={`Your task is to orchestrate sub-agents in order to solve the problem. Here is the problem to solve: 
+Problem Statement ============================================================== 
+{problem\_statement} 
+End Problem Statement ========================================================== 
+You must now delegate this problem to one, two or however many agents are required to thoroughly solve the problem. Ensure you relay the problem statement accurately and completely to the agent. Sub-agents will have access to the problem statement too, and so it should rarely be necessary to write it out verbatim. In particular, if the problem statement is very long, you should explicitly NOT write it out again in full. Instead, just give clear direction, and trust that the sub-agent can also refer to the problem statement. You have been given access to file and directory viewing tools, since these can help you get your bearings
+
+and direct sub-agents more effectively. These are however meant to help you understand the context in which you operate. You are intentionally not directly equipped with any tools to conduct substantive work, because you are just the router, delegator and orchestrator. The tools that your sub-agents' have available are however listed, and you should carefully refer to these when considering which agent to call next. It is these sub-agents' job to make the necessary state changes to make progress on the task at hand.`}
+            />
+          </div>
+        </SlideFrame>
+      );
+
+    // Slide 33
+    case 32:
+      return (
+        <SlideFrame slideNumber={33} eyebrow="Backup 7" title="Sub-Agent Prompt" thesis="The worker prompt is opinionated and procedural: understand context first, make minimal edits, test end to end, and clean up after the change." appendix wide printMode={printMode}>
+          <div className="mx-auto mt-[1vh] w-full max-w-[74rem]">
+            <CodePanel
+              title="Appendix A.1: Base Sub-Agent Prompt"
+              body={`As a professional and experienced programmer, your approach is to: 
+1. slow down and don't write files fully end-to-end in one go 
+2. first understand your context thoroughly: 
+2.1 explore the project to locate all the files that could be useful documentation (README.md files, common likely MD documentation files, etc) 
+2.2 view each of these files, making notes or summaries, and closing irrelevant or long files 
+2.3 explore the codebase as it relates to your instructions: find all relevant files, in order to identify existing design patterns and conventions 
+3. (optional) prototype and design before starting coding 
+3.1 come up with some simple toy examples in a testing directory 
+3.2 use execution feedback to benchmark or compare the approaches 
+3.3 synthesise the information and learnings into a final design or solution 
+4. make code edits 
+4.1 identify the most minimal and effective ways to make your required changes 
+4.2 observe any existing stylistic conventions 
+5. test end-to-end 5.1 Prefer end-to-end testing in testing scripts without test frameworks 
+5.2 If this is not an option or the project already uses a testing framework, then use that 
+5.3 Ensure your code is valid, hasn't introduced any regressions and works as intended 
+6. Clean up after yourself 
+6.1 Check that all the documentation is still up to date after your changes 
+6.2 Clean up any temporary files or changes 
+
+NOTE: - don't create virtual environments - avoid pytest and mocks if you can; prefer end-to-end scripts - if the request is clearly exploratory in nature, then you may bypass the rigorous procedure above, and address it appropriately - call your reasoning agent if you are stuck on a tricky algorithmic or mathematical problem, to help you gain insight and make progress`}
+            />
+          </div>
+        </SlideFrame>
+      );
+
+    // Slide 34
+    case 33:
+      return (
+        <SlideFrame slideNumber={34} eyebrow="Backup 8" title="Overseer Prompt" thesis="The overseer is a separate policy layer watching execution traces and deciding whether to steer, warn, or cancel agents." appendix wide printMode={printMode}>
+          <div className="mx-auto mt-[1vh] w-full max-w-[74rem]">
+            <CodePanel
+              title="Appendix A.2: Overseer Prompt"
+              body={`You are an expert system overseer responsible for monitoring agent execution in real-time. You will be shown execution traces as they develop and must make decisions about whether intervention is needed. You are running in a loop. 
+                
+Your task is to: 
+1. Analyze the current execution state 
+2. Determine if you have enough information to make confident assessments 
+3. Evaluate whether agents are progressing healthily or need intervention 
+4. Provide thoughtful and constructive steering notifications to running agents if intervention is needed 
+5. In extreme cases, cancel the execution of an agent and notify its parent of why this is 
+6. Leave notes for future evaluation iterations if needed 
+
+You must provide your analysis in the following structured format: 
+
+
+OVERSEER\_EXAMPLES 
+
+Here is the current execution trace: 
+
+graph\_repr 
+
+Previous overseer notes (if any) 
+self.\_previous\_notes if self.\_previous\_notes else 'No notes.' 
+
+Key considerations: 
+- Agents that have already returned cannot receive notifications 
+- Look at timestamps and event counts to understand execution progress 
+- Some agents may legitimately take long periods to complete 
+- Consider both local agent health and global execution progress 
+- If the agent appears stuck without terminating, remind it that it can exit by generating <COMPLETE>{COMPLETE\_STOP\_TOKEN} 
+- If, when the agent has been tasked to work on its own code at meta-improvement time, it is attempting to test tools or other features directly (using its own running code), intervene immediately and tell it to either test a new agent end-to-end (python -m workdir.agent -p "<some prompt>"...) or to create test scripts to test the tools directly. 
+- You may cancel an agent if it is no longer making progress, wasting resources, or very clearly going down the wrong path or deviating from its instructions. You must make at least one attempt to notify the agent of its wrongdoings before issuing a cancellation command. 
+- When canceling an agent, you must also notify its parent calling agent of the reasons for the cancellation. 
+- If the task becomes untenable, after multiple failed attempts, and the agent is appearing to repeat itself, instruct the main agent to use its early\_exit tool to exit early. 
+- Use cancellations sparingly, as they are disruptive and ultimately more costly than guiding the agent to successful completion, since any new sub-agent will often have to start the task from scratch. 
+
+The last time you checked was at: self.\_last\_check\_time.strftime("%H:%M:%S") if self.\_last\_check\_time else "N/A" 
+
+The current timestamp is datetime.now().strftime("%H:%M:%S") 
+
+
+Your analysis:`}
+            />
+          </div>
+        </SlideFrame>
+      );
+
+    // Slide 35
+    case 34:
+      return (
+        <SlideFrame slideNumber={35} eyebrow="Backup 9" title="Example Trace" thesis="Appendix B shows the kind of multi-agent execution tree the system actually produces: reasoning, problem solving, coding, debugging, verification, and final submission." appendix wide printMode={printMode}>
+          <div className="mx-auto mt-[1vh] w-full max-w-[74rem]">
+            <CodePanel
+              title="Appendix B: Representative Execution Tree"
+              body={`1 main [agent_b8845adf] (134.4s | 95752 tokens (cached 0.57%) | $0.185 | Success)
+   [Stats] Events: 1 tool calls, 6 messages
+   [Assistant] t+0.1s | "I'll orchestrate the solution to this problem foll..."
+   1.3 reasoning_agent [agent_20fccbc1] (12.0s | 5673 tokens (cached 0.00%) | $0.013 | Success)
+      [Stats] Events: 1 messages
+      [Assistant] t+9.8s | "Below is an explanation that addresses the three p..."
+   [Assistant] t+21.1s | "The reasoning agent has provided excellent analy..."
+   1.2 solve_problem [agent_11804c1f] (17.6s | 54822 tokens (cached 0.68%) | $0.085 | Success)
+      [Stats] Events: 3 tool calls, 4 messages
+      [Assistant] t+26.1s | "Let me solve this step by step.1. UNDERSTANDING..."
+      [Tool] calculate | 0.0s → Success
+      [Assistant] t+32.4s | "Therefore there are floor(404.8) = 404 complete..."
+      [Tool] return_result | 0.0s → Success
+      [Assistant] t+42.1s | "<COMPLETE></COMPLETE>..."
+   [Assistant] t+43.7s | "The problem solver has provided a solution..."
+   1.1 software_developer [agent_0117a7ef] (69.7s | 208122 tokens (cached 0.68%) | $0.321 | Success)
+      [Stats] Events: 8 tool calls, 10 messages
+      [Assistant] t+49.3s | "I'll help solve this mathematical game problem thr..."
+      [Tool] execute_command | 0.0s → Success
+      [Assistant] t+54.6s | "<TOOL_CALL><TOOL_NAME>start_lsp_server</TOOL_NA..."
+      [Tool] start_lsp_server | 2.2s → Success
+      [Assistant] t+59.9s | "Now let's create our main implementation file:..."
+      [Tool] overwrite_file | 0.0s → Success
+      [Assistant] t+70.4s | "Now let's create a test script to verify our imp..."
+      [Tool] overwrite_file | 0.0s → Success
+      [Assistant] t+76.8s | "Now let's run our test script to verify everythi..."
+      [Tool] execute_command | 0.0s → Success
+      [Assistant] t+80.9s | "I notice that there's an issue with our pattern..."
+      1.1.1 reasoning_agent [agent_8a69d943] (11.3s | 10231 tokens (cached 0.00%) | $0.017 | Success)
+         [Stats] Events: 1 messages
+         [Assistant] t+87.2s | "The problem comes from our backward induction func..."
+      [Assistant] t+98.5s | "Based on the reasoning agent's analysis, let's u..."
+      [Tool] overwrite_file | 0.0s → Success
+      [Assistant] t+107.8s | "Now let's run our test script again to verify th..."
+      [Tool] execute_command | 0.0s → Success
+      [Assistant] t+112.0s | "Perfect! Our implementation now correctly:1. I..."
+      [Tool] return_result | 0.0s → Success
+      [Assistant] t+116.8s | "<COMPLETE></COMPLETE>..."
+   [Assistant] t+119.0s | "Let's verify the software agent's answer since it di..."
+   1.4 reasoning_agent [agent_6cd34374] (5.0s | 12025 tokens (cached 0.00%) | $0.016 | Success)
+      [Stats] Events: 1 messages
+      [Assistant] t+124.1s | "Answer synthesis: Our analysis starts..."
+   [Assistant] t+129.1s | "Let's submit our final answer:<TOOL_CALL><TO..."
+   [Tool] submit_answer | 0.0s → Success
+   [Assistant] t+132.1s | "<COMPLETE></COMPLETE>..."
+Total Duration: 249.9s
+Total Tokens: 407766 (of which cached 232952)
+Total Cost: $0.712`}
+            />
+          </div>
+        </SlideFrame>
+      );
+
+    // Slide 36
+    case 35:
+      return (
+        <SlideFrame slideNumber={36} eyebrow="Backup 10" title="Agent And Tool Inventory" thesis="The starting scaffold is already a multi-agent system with role-specific tool bundles plus a shared set of auto-added control tools." appendix wide printMode={printMode}>
+          <div className="mx-auto mt-[1vh] grid w-full max-w-[74rem] grid-cols-2 gap-[1vw]">
+            <CodePanel title="main" body={`submit_answer
+open_files
+close_files
+view_directory
+meta_improvement_reasoning_structure
+meta_improvement_review_committee
+early_exit
+regenerate_context
+complete`} />
+            <CodePanel title="software_developer" body={`calculate
+view_directory
+execute_command
+ripgrep_search
+open_files
+close_files
+overwrite_file
+meta_improvement_review_committee
+early_exit
+regenerate_context
+return_result
+complete`} />
+            <CodePanel title="general_problem_solver" body={`calculate
+view_directory
+execute_command
+open_files
+close_files
+overwrite_file
+ripgrep_search
+meta_improvement_review_committee
+early_exit
+regenerate_context
+return_result
+complete`} />
+            <CodePanel title="archive_explorer" body={`view_directory
+open_files
+close_files
+best_problems
+worst_problems
+compare_agent_iterations
+early_exit
+regenerate_context
+return_result
+complete`} />
+            <CodePanel title="reasoning_agent" body={`No explicit tools
+
+early_exit
+regenerate_context
+return_result
+complete`} />
+          </div>
+        </SlideFrame>
       );
 
     default:
@@ -683,7 +927,19 @@ export default function App() {
   const printMode =
     typeof window !== "undefined" &&
     new URLSearchParams(window.location.search).get("print") === "1";
-  const [currentIndex, setCurrentIndex] = useState(0);
+  const [currentIndex, setCurrentIndex] = useState(() => {
+    if (typeof window === "undefined") return 0;
+    const storedIndex = window.localStorage.getItem(SLIDE_STORAGE_KEY);
+    if (!storedIndex) return 0;
+
+    const parsedIndex = Number.parseInt(storedIndex, 10);
+    return Number.isNaN(parsedIndex) ? 0 : clampIndex(parsedIndex, TOTAL_SLIDES);
+  });
+
+  useEffect(() => {
+    if (printMode || typeof window === "undefined") return;
+    window.localStorage.setItem(SLIDE_STORAGE_KEY, String(currentIndex));
+  }, [currentIndex, printMode]);
 
   useEffect(() => {
     if (printMode) return;
@@ -717,7 +973,7 @@ export default function App() {
         {!printMode ? (
           <>
             <ProgressNav currentIndex={currentIndex} setCurrentIndex={setCurrentIndex} />
-            {renderSlide(currentIndex, false)}
+            {renderSlide(currentIndex, false, setCurrentIndex)}
           </>
         ) : (
           <div className="bg-[var(--paper)]">
@@ -751,6 +1007,12 @@ export default function App() {
             {/* Slide 28 */}{renderSlide(27, true)}
             {/* Slide 29 */}{renderSlide(28, true)}
             {/* Slide 30 */}{renderSlide(29, true)}
+            {/* Slide 31 */}{renderSlide(30, true)}
+            {/* Slide 32 */}{renderSlide(31, true)}
+            {/* Slide 33 */}{renderSlide(32, true)}
+            {/* Slide 34 */}{renderSlide(33, true)}
+            {/* Slide 35 */}{renderSlide(34, true)}
+            {/* Slide 36 */}{renderSlide(35, true)}
           </div>
         )}
       </main>
