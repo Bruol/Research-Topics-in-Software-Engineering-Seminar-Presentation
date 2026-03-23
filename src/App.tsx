@@ -140,15 +140,17 @@ function PromptingTimelineVisual({ activeStep = 4 }: { activeStep?: 1 | 2 | 3 | 
     { label: "Prompt", label2: "Engineering", sub: "Chain-of-thought" },
     { label: "Self-Improving", label2: "Agent", sub: "Automated scaffold search" },
   ];
+  const svgWidth = 850;
   const stepWidth = 160;
   const stepHeight = 100;
   const gap = 40;
-  const startX = 30;
+  const timelineWidth = steps.length * stepWidth + (steps.length - 1) * gap;
+  const startX = (svgWidth - timelineWidth) / 2;
   const startY = 60;
   
   return (
-    <svg viewBox="0 0 850 250" className="h-full w-full">
-      <rect x="0" y="0" width="850" height="250" rx="20" fill="#fcfbf8" />
+    <svg viewBox={`0 0 ${svgWidth} 250`} className="h-full w-full">
+      <rect x="0" y="0" width={svgWidth} height="250" rx="20" fill="#fcfbf8" />
       
       {/* Timeline line */}
       <line 
@@ -438,16 +440,16 @@ function renderSlide(slideIndex: number, printMode = false) {
     // Slide 4
     case 3:
       return (
-        <SlideFrame slideNumber={4} eyebrow="Context" title="SICA arrives after years of prompt and scaffold tricks" thesis="Chain-of-thought, STaR, Tree of Thoughts, and self-refinement all support the same lesson: orchestration choices can matter nearly as much as model weights." visual={<PromptingTimelineVisual activeStep={2} />} printMode={printMode} />
+        <SlideFrame slideNumber={4} eyebrow="Context" title="SICA arrives after years of prompt engineering" thesis="Chain-of-thought, STaR, Tree of Thoughts, and self-refinement all support the same lesson: orchestration choices can matter nearly as much as model weights." visual={<PromptingTimelineVisual activeStep={2} />} printMode={printMode} />
       );
 
     // Slide 5
     case 4:
       return (
-        <SlideFrame slideNumber={5} eyebrow="Context" title="What is actually new relative to ADAS and AlphaEvolve?" thesis="ADAS improves a separate target agent, while SICA makes the current best agent become the next improver, which is the paper’s core novelty claim." visual={<PromptingTimelineVisual activeStep={4} />} printMode={printMode}>
-          <div className="mt-[1vh] grid max-w-[32rem] grid-cols-2 gap-[1vw]">
+        <SlideFrame slideNumber={5} eyebrow="Context" title="What is actually new relative to ADAS and AlphaEvolve?" thesis="ADAS improves a separate target agent, while SICA makes the current best agent become the next improver, which is the paper’s core novelty claim." visual={<PromptingTimelineVisual activeStep={3} />} printMode={printMode}>
+          <div className="mt-[1vh] grid max-w-[38rem] grid-cols-2 gap-[1vw]">
             <InfoCard title="ADAS" body="Fixed meta-agent, separate target agent, more constrained setting." />
-            <InfoCard title="SICA" body="The improver and target collapse into one evolving coding-agent scaffold." />
+            <InfoCard title="Alpha Evolve" body="Starts from a baseline program plus a reference test, then keeps iterating toward a faster objective. -- only works for highly structured problems." />
           </div>
         </SlideFrame>
       );
