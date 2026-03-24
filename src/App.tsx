@@ -1,12 +1,22 @@
 import { useEffect, useState, type ReactNode } from "react";
 import { UtilityVisual } from "./components/UtilityVisual";
+import { setPersistedSlide, subscribeToCurrentSlide } from "./presentationState";
+import { speakerNotesBySlide } from "./speakerNotes";
 
 const TOTAL_SLIDES = 36;
 const APPENDIX_START = 26;
-const SLIDE_STORAGE_KEY = "rtse-presentation-current-slide";
+const PREVIEW_WIDTH = 1333;
+const PREVIEW_HEIGHT = 750;
+
+type ViewMode = "presentation" | "notes";
+type SlideSetter = (value: number | ((currentIndex: number) => number)) => void;
 
 function clampIndex(nextIndex: number, max: number) {
   return Math.max(0, Math.min(max - 1, nextIndex));
+}
+
+function getViewMode(pathname: string): ViewMode {
+  return pathname === "/notes" ? "notes" : "presentation";
 }
 
 function ToolCountVisual() {
@@ -368,7 +378,7 @@ function SlideFrame({
   );
 }
 
-function ProgressNav({ currentIndex, setCurrentIndex }: { currentIndex: number; setCurrentIndex: (index: number) => void }) {
+function ProgressNav({ currentIndex, setCurrentIndex }: { currentIndex: number; setCurrentIndex: SlideSetter }) {
   const currentIsAppendix = currentIndex >= APPENDIX_START;
   const start = currentIsAppendix ? APPENDIX_START : 0;
   const end = currentIsAppendix ? TOTAL_SLIDES : APPENDIX_START;
@@ -941,35 +951,220 @@ complete`} />
   }
 }
 
+function NotesList({ currentIndex }: { currentIndex: number }) {
+  const slideNumber = currentIndex + 1;
+  const notes = speakerNotesBySlide[slideNumber] ?? [];
+
+  return (
+    <section className="flex min-h-0 flex-col overflow-hidden rounded-[1.75rem] border border-[rgba(18,18,18,0.08)] bg-[rgba(255,252,247,0.92)] shadow-[0_20px_60px_rgba(18,18,18,0.08)]">
+      <div className="border-b border-[rgba(18,18,18,0.08)] px-6 py-5">
+        <div className="font-mono text-[0.72rem] font-semibold uppercase tracking-[0.16em] text-[var(--accent)]">Speaker Notes</div>
+        <h1 className="m-0 mt-2 font-display text-[clamp(1.6rem,2.6vw,2.4rem)] leading-[1] text-[var(--ink)]">
+          Slide {slideNumber}
+        </h1>
+      </div>
+
+      <div className="min-h-0 flex-1 overflow-y-auto px-6 py-5">
+        {notes.length ? (
+          <div className="flex flex-col gap-3">
+            {notes.map((line, index) => {
+              const leadingSpaces = line.length - line.trimStart().length;
+              const indentLevel = Math.floor(leadingSpaces / 4);
+              const isBullet = /^\s*-\s+/.test(line);
+              const content = line.trimStart().replace(/^-\s+/, "");
+
+              return (
+                <div
+                  key={`${slideNumber}-${index}`}
+                  className="flex items-start gap-3"
+                  style={{ paddingLeft: `${indentLevel * 1.1}rem` }}
+                >
+                  <span className={["mt-[0.45rem] block h-2 w-2 rounded-full", isBullet ? "bg-[var(--highlight)]" : "bg-transparent"].join(" ")} />
+                  <p className="m-0 text-[1.02rem] leading-[1.65] text-[var(--ink-soft)]">{content}</p>
+                </div>
+              );
+            })}
+          </div>
+        ) : (
+          <div className="rounded-[1.25rem] border border-dashed border-[rgba(18,18,18,0.14)] bg-[rgba(255,255,255,0.55)] px-5 py-4">
+            <p className="m-0 font-serif text-[1rem] italic leading-[1.6] text-[var(--muted)]">
+              No speaker notes for this slide in <code>res/speaker_notes.md</code>.
+            </p>
+          </div>
+        )}
+      </div>
+    </section>
+  );
+}
+
+function SlidePreview({ currentIndex }: { currentIndex: number }) {
+  return (
+    <section className="flex min-h-0 flex-col overflow-hidden rounded-[1.75rem] border border-[rgba(18,18,18,0.08)] bg-[rgba(255,255,255,0.78)] shadow-[0_20px_60px_rgba(18,18,18,0.08)]">
+      <div className="border-b border-[rgba(18,18,18,0.08)] px-6 py-5">
+        <div className="font-mono text-[0.72rem] font-semibold uppercase tracking-[0.16em] text-[var(--accent)]">Slide Preview</div>
+        <p className="m-0 mt-2 text-[0.95rem] leading-[1.5] text-[var(--muted)]">
+          This preview tracks the live slide index stored in RxDB and stays in sync with the presenter tab.
+        </p>
+      </div>
+
+      <div className="min-h-0 flex-1 overflow-auto p-5">
+        <div className="flex h-full min-h-[18rem] items-start justify-center overflow-hidden rounded-[1.5rem] border border-[rgba(102,73,255,0.12)] bg-[linear-gradient(180deg,rgba(255,255,255,0.95),rgba(245,240,232,0.95))]">
+          <div className="origin-top pt-4 [transform:scale(0.18)] sm:[transform:scale(0.24)] md:[transform:scale(0.32)] xl:[transform:scale(0.42)]">
+            <div style={{ width: `${PREVIEW_WIDTH}px`, height: `${PREVIEW_HEIGHT}px` }}>
+              {renderSlide(currentIndex, true)}
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function NotesView({
+  currentIndex,
+  setCurrentIndex,
+}: {
+  currentIndex: number;
+  setCurrentIndex: SlideSetter;
+}) {
+  const slideNumber = currentIndex + 1;
+
+  return (
+    <main className="relative z-[1] min-h-screen overflow-hidden px-4 py-4 sm:px-6 sm:py-6">
+      <div className="mx-auto flex min-h-[calc(100vh-2rem)] max-w-[1800px] flex-col gap-4 sm:min-h-[calc(100vh-3rem)]">
+        <header className="flex flex-wrap items-center justify-between gap-3 rounded-[1.5rem] border border-[rgba(18,18,18,0.08)] bg-[rgba(255,252,247,0.88)] px-5 py-4 shadow-[0_12px_40px_rgba(18,18,18,0.06)] backdrop-blur-[10px]">
+          <div>
+            <div className="font-mono text-[0.72rem] font-semibold uppercase tracking-[0.16em] text-[var(--accent)]">Notes View</div>
+            <div className="mt-1 flex items-center gap-3">
+              <span className="font-display text-[clamp(1.4rem,2vw,2rem)] leading-none text-[var(--ink)]">Slide {slideNumber}</span>
+              <a
+                href="/presentation"
+                className="rounded-full border border-[rgba(102,73,255,0.18)] bg-[rgba(255,255,255,0.8)] px-3 py-1 font-mono text-[0.72rem] font-semibold uppercase tracking-[0.12em] text-[var(--accent)] no-underline"
+              >
+                Open Presenter
+              </a>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={() => setCurrentIndex((index) => index - 1)}
+              className="rounded-full border border-[rgba(18,18,18,0.1)] bg-white px-4 py-2 font-mono text-[0.78rem] font-semibold uppercase tracking-[0.08em] text-[var(--ink)] transition-colors hover:border-[rgba(102,73,255,0.28)] hover:text-[var(--accent)]"
+            >
+              Previous
+            </button>
+            <button
+              type="button"
+              onClick={() => setCurrentIndex((index) => index + 1)}
+              className="rounded-full border border-[rgba(102,73,255,0.18)] bg-[var(--accent)] px-4 py-2 font-mono text-[0.78rem] font-semibold uppercase tracking-[0.08em] text-white transition-opacity hover:opacity-90"
+            >
+              Next
+            </button>
+          </div>
+        </header>
+
+        <div className="grid min-h-0 flex-1 gap-4 xl:grid-cols-[minmax(20rem,0.9fr)_minmax(0,1.35fr)]">
+          <NotesList currentIndex={currentIndex} />
+          <SlidePreview currentIndex={currentIndex} />
+        </div>
+      </div>
+    </main>
+  );
+}
+
+function PresentationView({
+  currentIndex,
+  setCurrentIndex,
+}: {
+  currentIndex: number;
+  setCurrentIndex: SlideSetter;
+}) {
+  return (
+    <main className="relative z-[1] min-h-screen overflow-hidden">
+      <ProgressNav currentIndex={currentIndex} setCurrentIndex={setCurrentIndex} />
+      {renderSlide(currentIndex, false, (index) => setCurrentIndex(index))}
+    </main>
+  );
+}
+
 export default function App() {
+  const [viewMode, setViewMode] = useState<ViewMode>(() => {
+    if (typeof window === "undefined") return "presentation";
+    return getViewMode(window.location.pathname);
+  });
   const printMode =
     typeof window !== "undefined" &&
     new URLSearchParams(window.location.search).get("print") === "1";
-  const [currentIndex, setCurrentIndex] = useState(() => {
-    if (typeof window === "undefined") return 0;
-    const storedIndex = window.localStorage.getItem(SLIDE_STORAGE_KEY);
-    if (!storedIndex) return 0;
-
-    const parsedIndex = Number.parseInt(storedIndex, 10);
-    return Number.isNaN(parsedIndex) ? 0 : clampIndex(parsedIndex, TOTAL_SLIDES);
-  });
+  const [currentIndex, setCurrentIndexState] = useState(0);
 
   useEffect(() => {
-    if (printMode || typeof window === "undefined") return;
-    window.localStorage.setItem(SLIDE_STORAGE_KEY, String(currentIndex));
-  }, [currentIndex, printMode]);
+    if (typeof window === "undefined" || printMode) return;
+
+    const pathname = window.location.pathname;
+    if (pathname !== "/presentation" && pathname !== "/notes") {
+      window.history.replaceState({}, "", `/presentation${window.location.search}${window.location.hash}`);
+      setViewMode("presentation");
+    }
+  }, [printMode]);
+
+  useEffect(() => {
+    if (typeof window === "undefined" || printMode) return;
+
+    const onPopState = () => {
+      setViewMode(getViewMode(window.location.pathname));
+    };
+
+    window.addEventListener("popstate", onPopState);
+    return () => window.removeEventListener("popstate", onPopState);
+  }, [printMode]);
 
   useEffect(() => {
     if (printMode) return;
+
+    let unsubscribe: (() => void) | undefined;
+    let disposed = false;
+
+    void subscribeToCurrentSlide((index) => {
+      if (disposed) return;
+      setCurrentIndexState(clampIndex(index, TOTAL_SLIDES));
+    }).then((cleanup) => {
+      if (disposed) {
+        cleanup();
+        return;
+      }
+      unsubscribe = cleanup;
+    });
+
+    return () => {
+      disposed = true;
+      unsubscribe?.();
+    };
+  }, [printMode]);
+
+  const setCurrentIndex: SlideSetter = (value) => {
+    setCurrentIndexState((previousIndex) => {
+      const nextIndex = clampIndex(
+        typeof value === "function" ? value(previousIndex) : value,
+        TOTAL_SLIDES,
+      );
+      void setPersistedSlide(nextIndex);
+      return nextIndex;
+    });
+  };
+
+  useEffect(() => {
+    if (printMode) return;
+
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.target instanceof HTMLElement && ["INPUT", "TEXTAREA", "SELECT"].includes(event.target.tagName)) return;
       if (event.key === "ArrowRight" || event.key === "ArrowDown" || event.key === " " || event.key === "PageDown") {
         event.preventDefault();
-        setCurrentIndex((index) => clampIndex(index + 1, TOTAL_SLIDES));
+        setCurrentIndex((index) => index + 1);
       }
       if (event.key === "ArrowLeft" || event.key === "ArrowUp" || event.key === "PageUp") {
         event.preventDefault();
-        setCurrentIndex((index) => clampIndex(index - 1, TOTAL_SLIDES));
+        setCurrentIndex((index) => index - 1);
       }
       if (event.key === "Home") {
         event.preventDefault();
@@ -987,13 +1182,8 @@ export default function App() {
   return (
     <>
       <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500;600&display=swap" rel="stylesheet" />
-      <main className={["relative z-[1]", printMode ? "print-deck w-[13.333in]" : "min-h-screen overflow-hidden"].join(" ")}>
-        {!printMode ? (
-          <>
-            <ProgressNav currentIndex={currentIndex} setCurrentIndex={setCurrentIndex} />
-            {renderSlide(currentIndex, false, setCurrentIndex)}
-          </>
-        ) : (
+      {printMode ? (
+        <main className="relative z-[1] print-deck w-[13.333in]">
           <div className="bg-[var(--paper)]">
             {/* Slide 1 */}{renderSlide(0, true)}
             {/* Slide 2 */}{renderSlide(1, true)}
@@ -1032,8 +1222,12 @@ export default function App() {
             {/* Slide 35 */}{renderSlide(34, true)}
             {/* Slide 36 */}{renderSlide(35, true)}
           </div>
-        )}
-      </main>
+        </main>
+      ) : viewMode === "notes" ? (
+        <NotesView currentIndex={currentIndex} setCurrentIndex={setCurrentIndex} />
+      ) : (
+        <PresentationView currentIndex={currentIndex} setCurrentIndex={setCurrentIndex} />
+      )}
     </>
   );
 }
